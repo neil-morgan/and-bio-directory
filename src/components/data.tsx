@@ -1,12 +1,7 @@
-import {
-  useQuery,
-  useLazyQuery,
-  useMutation,
-  Reference,
-  StoreObject,
-} from "@apollo/client";
+import type { Reference, StoreObject } from "@apollo/client";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { Box } from "@mui/material";
-import { CREATE_USER, DELETE_USER, GET_USER_BY_NAME, QUERY_USERS } from "api";
+import { CREATE_USER, DELETE_USER, GET_USER_BY_NAME, GET_USERS } from "api";
 import { useState } from "react";
 import type { FC } from "react";
 import { v4 as uuid } from "uuid";
@@ -22,9 +17,9 @@ export const Data: FC = () => {
   const [name, setName] = useState("");
 
   // useQuery gets data on load
-  const { data, loading, refetch } = useQuery(QUERY_USERS);
+  const { data, loading, refetch } = useQuery(GET_USERS);
 
-  // useLazyQuery only fetch data on request
+  // useLazyGET only fetch data on request
   const [fetchBio, { data: fetchedBio, error: fetchBioError }] =
     useLazyQuery(GET_USER_BY_NAME);
 
@@ -32,8 +27,6 @@ export const Data: FC = () => {
   const [createUser] = useMutation(CREATE_USER);
   const [deleteUser] = useMutation(DELETE_USER);
 
-  //! Bug when creating a new user in to an empty users array
-  //! probably to do with lack of previous ID to calc new ID from.
   const handleCreateUser = () => {
     if (name === "") {
       return;
@@ -64,6 +57,19 @@ export const Data: FC = () => {
         });
       },
     });
+  };
+
+  const handleSearch = () => {
+    if (bioSearched === "") {
+      return;
+    }
+    fetchBio({
+      variables: {
+        name: bioSearched,
+      },
+    });
+
+    refetch();
   };
 
   if (loading) {
@@ -101,23 +107,12 @@ export const Data: FC = () => {
           }}
         />
 
-        <button
-          type="button"
-          onClick={() => {
-            fetchBio({
-              variables: {
-                name: bioSearched,
-              },
-            });
-
-            refetch();
-          }}
-        >
+        <button type="button" onClick={handleSearch}>
           Search
         </button>
         <div>
           {fetchedBio && <div>Result found: {fetchedBio.userByName.name}</div>}
-          {fetchBioError && <h1> There was an error fetching the data</h1>}
+          {fetchBioError && <div> There was an error fetching the data</div>}
         </div>
       </div>
 
