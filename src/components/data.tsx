@@ -36,7 +36,7 @@ export const Data: FC = () => {
   return (
     <div>
       <div>
-        <label htmlFor="name">Add User</label>
+        <label htmlFor="name">add user</label>
         <input
           name="name"
           aria-label="Name"
@@ -64,7 +64,7 @@ export const Data: FC = () => {
       </div>
 
       <div>
-        <label htmlFor="search">Search User</label>
+        <label htmlFor="search">search user</label>
         <input
           aria-label="Search"
           type="text"
