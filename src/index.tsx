@@ -16,7 +16,7 @@ import "@fontsource/roboto/700.css";
     cache: new InMemoryCache(),
     // http://localhost:4000/graphql
     // https://and-bio-directory.herokuapp.com/
-    uri: "http://localhost:4000/graphql",
+    uri: "https://and-bio-directory.herokuapp.com/",
   });
 
   ReactDOM.render(
