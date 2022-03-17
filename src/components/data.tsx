@@ -37,6 +37,8 @@ export const Data: FC = () => {
       },
     });
     refetch();
+
+    //! NEED TO UPDATE USERS CACHE HERE
   };
 
   const handleDeleteUser = (id: number) => {
