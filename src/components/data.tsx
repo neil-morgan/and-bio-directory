@@ -1,13 +1,9 @@
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import { Box } from "@mui/material";
+import { CREATE_USER, DELETE_USER, GET_USER_BY_NAME, QUERY_USERS } from "api";
 import { useState } from "react";
 import type { FC } from "react";
 import { v4 as uuid } from "uuid";
-
-import {
-  CREATE_USER_MUTATION,
-  GET_USER_BY_NAME,
-  QUERY_ALL_USERS,
-} from "../api";
 
 type User = {
   name: string;
@@ -20,14 +16,35 @@ export const Data: FC = () => {
   const [name, setName] = useState("");
 
   // useQuery gets data on load
-  const { data, loading, refetch } = useQuery(QUERY_ALL_USERS);
+  const { data, loading, refetch } = useQuery(QUERY_USERS);
 
   // useLazyQuery only fetch data on request
   const [fetchBio, { data: fetchedBio, error: fetchBioError }] =
     useLazyQuery(GET_USER_BY_NAME);
 
   // useMutation returns a function
-  const [createUser] = useMutation(CREATE_USER_MUTATION);
+  const [createUser] = useMutation(CREATE_USER);
+  const [deleteUser] = useMutation(DELETE_USER);
+
+  //! Bug when creating a new user in to an empty users array
+  //! probably to do with lack of previous ID to calc new ID from.
+  const handleCreateUser = () => {
+    createUser({
+      variables: {
+        input: { name },
+      },
+    });
+    refetch();
+  };
+
+  const handleDeleteUser = (id: number) => {
+    deleteUser({
+      variables: {
+        deleteUserId: id,
+      },
+    });
+    refetch();
+  };
 
   if (loading) {
     return <span>loading</span>;
@@ -47,18 +64,7 @@ export const Data: FC = () => {
           }}
         />
 
-        <button
-          type="button"
-          onClick={() => {
-            createUser({
-              variables: {
-                input: { name },
-              },
-            });
-
-            refetch();
-          }}
-        >
+        <button type="button" onClick={handleCreateUser}>
           Create User
         </button>
       </div>
@@ -83,6 +89,8 @@ export const Data: FC = () => {
                 name: bioSearched,
               },
             });
+
+            refetch();
           }}
         >
           Search
@@ -94,7 +102,24 @@ export const Data: FC = () => {
       </div>
 
       {data?.users.map((user: User) => (
-        <div key={uuid()}>name: {user.name}</div>
+        <Box
+          key={uuid()}
+          sx={{
+            display: "flex",
+          }}
+        >
+          <div>
+            id: {user.id} - name: {user.name}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              handleDeleteUser(user.id);
+            }}
+          >
+            delete
+          </button>
+        </Box>
       ))}
     </div>
   );

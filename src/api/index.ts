@@ -1,5 +1,6 @@
 export {
-  CREATE_USER_MUTATION,
+  CREATE_USER,
+  DELETE_USER,
   GET_USER_BY_NAME,
-  QUERY_ALL_USERS,
+  QUERY_USERS,
 } from "./users";
