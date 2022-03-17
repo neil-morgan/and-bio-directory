@@ -14,9 +14,10 @@ import "@fontsource/roboto/700.css";
 (() => {
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    // http://localhost:4000/graphql
-    // https://and-bio-directory.herokuapp.com/
-    uri: "https://and-bio-directory.herokuapp.com/",
+    uri:
+      process.env.NODE_ENV === "production"
+        ? "https://and-bio-directory.herokuapp.com/"
+        : "http://localhost:4000/graphql",
   });
 
   ReactDOM.render(

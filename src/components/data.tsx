@@ -1,4 +1,10 @@
-import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import {
+  useQuery,
+  useLazyQuery,
+  useMutation,
+  Reference,
+  StoreObject,
+} from "@apollo/client";
 import { Box } from "@mui/material";
 import { CREATE_USER, DELETE_USER, GET_USER_BY_NAME, QUERY_USERS } from "api";
 import { useState } from "react";
@@ -29,6 +35,9 @@ export const Data: FC = () => {
   //! Bug when creating a new user in to an empty users array
   //! probably to do with lack of previous ID to calc new ID from.
   const handleCreateUser = () => {
+    if (name === "") {
+      return;
+    }
     createUser({
       variables: {
         input: { name },
@@ -42,8 +51,19 @@ export const Data: FC = () => {
       variables: {
         deleteUserId: id,
       },
+      update(cache) {
+        cache.modify({
+          fields: {
+            users(refs, { readField }) {
+              return refs.filter(
+                (ref: Reference | StoreObject | undefined) =>
+                  id !== readField("id", ref)
+              );
+            },
+          },
+        });
+      },
     });
-    refetch();
   };
 
   if (loading) {
