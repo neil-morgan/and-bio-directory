@@ -1,9 +1,9 @@
-import type { Reference, StoreObject } from "@apollo/client";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { Box } from "@mui/material";
 import { CREATE_USER, DELETE_USER, GET_USER_BY_NAME, GET_USERS } from "api";
 import { useState } from "react";
 import type { FC } from "react";
+import { updateUsers } from "utils";
 import { v4 as uuid } from "uuid";
 
 type User = {
@@ -24,8 +24,8 @@ export const Data: FC = () => {
     useLazyQuery(GET_USER_BY_NAME);
 
   // useMutation returns a function
-  const [createUser] = useMutation(CREATE_USER);
-  const [deleteUser] = useMutation(DELETE_USER);
+  const [createUser] = useMutation(CREATE_USER, updateUsers());
+  const [deleteUser] = useMutation(DELETE_USER, updateUsers());
 
   const handleCreateUser = () => {
     if (name === "") {
@@ -36,27 +36,12 @@ export const Data: FC = () => {
         input: { name },
       },
     });
-    refetch();
-
-    //! NEED TO UPDATE USERS CACHE HERE
   };
 
   const handleDeleteUser = (id: number) => {
     deleteUser({
       variables: {
-        deleteUserId: id,
-      },
-      update(cache) {
-        cache.modify({
-          fields: {
-            users(refs, { readField }) {
-              return refs.filter(
-                (ref: Reference | StoreObject | undefined) =>
-                  id !== readField("id", ref)
-              );
-            },
-          },
-        });
+        id,
       },
     });
   };
