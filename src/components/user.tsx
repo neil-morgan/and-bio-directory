@@ -18,12 +18,7 @@ export const User: FC<UserProps> = ({ name, id }) => {
   };
 
   return (
-    <Box
-      key={uuid()}
-      sx={{
-        display: "flex",
-      }}
-    >
+    <Box key={uuid()} sx={wrapper}>
       <div>
         id: {id} - name: {name}
       </div>
@@ -37,4 +32,8 @@ export const User: FC<UserProps> = ({ name, id }) => {
       </button>
     </Box>
   );
+};
+
+const wrapper = {
+  display: "flex",
 };
