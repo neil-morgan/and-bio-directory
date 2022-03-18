@@ -8,6 +8,9 @@ export const theme = createTheme({
         body: {
           backgroundColor: grey[50],
         },
+        "#root": {
+          display: "flex",
+        },
       },
     },
   },

@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/client";
+import { Box } from "@mui/material";
 import { GET_USERS } from "api";
 import { User, Users, Search } from "components";
 import type { FC } from "react";
@@ -13,13 +14,19 @@ export const Dashboard: FC = () => {
   }
 
   return (
-    <>
+    <Box sx={wrapperProps}>
       <Search />
       <Users>
         {data?.users.map((user: { name: string; id: number }) => (
           <User key={uuid()} name={user.name} id={user.id} />
         ))}
       </Users>
-    </>
+    </Box>
   );
+};
+
+const wrapperProps = {
+  display: "flex",
+  flexDirection: "column",
+  p: 1,
 };
