@@ -1,9 +1,10 @@
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import { Data } from "components";
+import { Dashboard } from "pages";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { theme } from "theme";
 
 import "@fontsource/roboto/300.css";
@@ -24,8 +25,12 @@ import "@fontsource/roboto/700.css";
     <StrictMode>
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Data />
+          <BrowserRouter>
+            <CssBaseline />
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+            </Routes>
+          </BrowserRouter>
         </ThemeProvider>
       </ApolloProvider>
     </StrictMode>,
