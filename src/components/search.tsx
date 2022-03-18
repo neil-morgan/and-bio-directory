@@ -12,6 +12,7 @@ export const Search: FC = () => {
     if (bioSearched === "") {
       return;
     }
+
     fetchBio({
       variables: {
         name: bioSearched,
