@@ -26,6 +26,15 @@ export const GET_USERS = gql`
   }
 `;
 
+export const GET_USER = gql`
+  query ($id: ID!) {
+    user(id: $id) {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_USER_BY_NAME = gql`
   query ($name: String!) {
     userByName(name: $name) {
