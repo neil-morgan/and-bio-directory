@@ -6,9 +6,11 @@ import type { FC, ReactNode } from "react";
 import { useState } from "react";
 import { defaultNewUser, updateUsers } from "utils";
 
-export const Users: FC<{
+type UsersProps = {
   children?: ReactNode | ReactNode[];
-}> = ({ children }) => {
+};
+
+export const Users: FC<UsersProps> = ({ children }) => {
   const [inputs, setInputs] = useState(defaultNewUser);
   const [open, setOpen] = useState(false);
   const [createUser] = useMutation(CREATE_USER, updateUsers());
