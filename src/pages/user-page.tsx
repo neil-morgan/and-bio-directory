@@ -1,10 +1,9 @@
 import type { FC } from "react";
 import { useMutation } from "@apollo/client";
-import { DELETE_USER } from "api";
+import { DELETE_USER, GET_USER } from "api";
 import { updateUsers } from "utils";
 import { useQuery } from "@apollo/client";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { GET_USER } from "api";
 import { Box, Typography, CircularProgress } from "@mui/material";
 
 export const UserPage: FC = () => {
