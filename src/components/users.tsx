@@ -2,13 +2,10 @@ import { useMutation } from "@apollo/client";
 import { Box, Button, Typography, TextField, Modal } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { CREATE_USER } from "api";
-import type { FC, ReactNode } from "react";
+import type { FC } from "react";
+import type { UsersProps } from "types";
 import { useState } from "react";
 import { defaultNewUser, updateUsers } from "utils";
-
-type UsersProps = {
-  children?: ReactNode | ReactNode[];
-};
 
 export const Users: FC<UsersProps> = ({ children }) => {
   const [inputs, setInputs] = useState(defaultNewUser);
