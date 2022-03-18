@@ -4,17 +4,11 @@ import { grey } from "@mui/material/colors";
 import { CREATE_USER } from "api";
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
-import { updateUsers } from "utils";
+import { defaultNewUser, updateUsers } from "utils";
 
-type UsersProps = {
+export const Users: FC<{
   children?: ReactNode | ReactNode[];
-};
-
-const defaultNewUser = {
-  name: "",
-};
-
-export const Users: FC<UsersProps> = ({ children }) => {
+}> = ({ children }) => {
   const [inputs, setInputs] = useState(defaultNewUser);
   const [open, setOpen] = useState(false);
   const [createUser] = useMutation(CREATE_USER, updateUsers());
