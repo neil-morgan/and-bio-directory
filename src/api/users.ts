@@ -5,6 +5,17 @@ export const CREATE_USER = gql`
     createUser(input: $input) {
       id
       name
+      jobTitle
+    }
+  }
+`;
+
+export const UPDATE_USER = gql`
+  mutation ($input: UpdateUserInput) {
+    updateUser(input: $input) {
+      id
+      name
+      jobTitle
     }
   }
 `;
@@ -22,7 +33,7 @@ export const GET_USERS = gql`
     users {
       id
       name
-      job_title
+      jobTitle
     }
   }
 `;
@@ -32,7 +43,7 @@ export const GET_USER = gql`
     user(id: $id) {
       id
       name
-      job_title
+      jobTitle
     }
   }
 `;

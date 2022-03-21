@@ -1,39 +1,44 @@
-import type { FC, MouseEvent } from "react";
-import { useState } from "react";
-
-import { useMutation } from "@apollo/client";
-import { DELETE_USER, GET_USER } from "api";
-import { updateUsers } from "utils";
-import { useQuery } from "@apollo/client";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useQuery, useMutation } from "@apollo/client";
 import {
   Box,
   Button,
-  Typography,
-  Popover,
   CircularProgress,
+  Modal,
+  Popover,
+  Typography
 } from "@mui/material";
+import { DELETE_USER, GET_USER } from "api";
+import { UserUpdate } from "components";
+import type { FC } from "react";
+import { useState, useRef } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { modalBoxStyle } from "theme";
+import { updateUsers } from "utils";
 
 export const UserPage: FC = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const [anchorEl, setAnchorEl] = useState<
-    (EventTarget & HTMLButtonElement) | null
-  >(null);
+  const deleteRef = useRef(null);
 
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
+  const handlePopoverClose = () => {
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
+  const popoverOpen = Boolean(anchorEl);
+  const id = popoverOpen ? "simple-popover" : undefined;
   const { loading, data } = useQuery(GET_USER, {
-    variables: { id: userId },
+    variables: { id: userId }
   });
 
   const [deleteUser] = useMutation(DELETE_USER, updateUsers());
@@ -41,78 +46,100 @@ export const UserPage: FC = () => {
   const handleDeleteUser = (id: number) => {
     deleteUser({
       variables: {
-        id,
-      },
+        id
+      }
     });
   };
 
   return loading ? (
     <CircularProgress />
   ) : (
-    <Box sx={wrapper}>
-      <Link to={"/"}>
-        <Typography>back</Typography>
-      </Link>
-      <Typography variant="h6">ID: {data.user.id}</Typography>
-      <Typography variant="h4">{data.user.name}'s page</Typography>
+    <>
+      <Box sx={wrapper}>
+        <Link to="/">
+          <Typography>back</Typography>
+        </Link>
+        <Typography variant="h6">ID: {data.user.id}</Typography>
+        <Typography variant="h4">{data.user.name}'s page</Typography>
 
-      <Button variant="contained">Update User</Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleModalOpen();
+          }}
+        >
+          Update User
+        </Button>
 
-      <Button variant="contained" color="error" onClick={handleClick}>
-        Delete User
-      </Button>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-      >
-        <Box sx={popover}>
-          <Typography sx={popoverTitle} variant="h6">
-            Are you sure?
-          </Typography>
-          <Button variant="outlined" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button
-            sx={button}
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteUser(data.user.id);
-              navigate("/");
-            }}
-          >
-            Delete
-          </Button>
+        <Button
+          ref={deleteRef}
+          variant="contained"
+          color="error"
+          onClick={() => {
+            setAnchorEl(deleteRef.current);
+          }}
+        >
+          Delete User
+        </Button>
+        <Popover
+          id={id}
+          open={popoverOpen}
+          anchorEl={anchorEl}
+          onClose={handlePopoverClose}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center"
+          }}
+          transformOrigin={{
+            vertical: "bottom",
+            horizontal: "center"
+          }}
+        >
+          <Box sx={popover}>
+            <Typography sx={popoverTitle} variant="h6">
+              Are you sure?
+            </Typography>
+            <Button variant="outlined" onClick={handlePopoverClose}>
+              Cancel
+            </Button>
+            <Button
+              sx={button}
+              variant="contained"
+              color="error"
+              onClick={() => {
+                handleDeleteUser(data.user.id);
+                navigate("/");
+              }}
+            >
+              Delete
+            </Button>
+          </Box>
+        </Popover>
+      </Box>
+
+      <Modal open={modalOpen} onClose={handleModalClose}>
+        <Box sx={modalBoxStyle}>
+          <UserUpdate />
         </Box>
-      </Popover>
-    </Box>
+      </Modal>
+    </>
   );
 };
 
 const wrapper = {
   display: "flex",
-  flexDirection: "column",
+  flexDirection: "column"
 };
 
 const popover = {
-  p: 2,
+  p: 2
 };
 
 const popoverTitle = {
   mb: 2,
-  textAlign: "center",
+  textAlign: "center"
 };
 
 const button = {
-  ml: 2,
+  ml: 2
 };

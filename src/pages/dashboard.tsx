@@ -13,23 +13,19 @@ export const Dashboard: FC = () => {
     return <span>Data loading please wait...</span>;
   }
 
+  type DashboardProps = {
+    name: string;
+    jobTitle: string;
+    id: number;
+  };
+
   return (
     <Box sx={wrapperProps}>
       <Search />
       <Users>
-        {data?.users.map(
-          ({
-            name,
-            id,
-            job_title,
-          }: {
-            name: string;
-            job_title: string;
-            id: number;
-          }) => (
-            <User key={uuid()} name={name} jobTitle={job_title} id={id} />
-          )
-        )}
+        {data?.users.map(({ name, id, jobTitle }: DashboardProps) => (
+          <User key={uuid()} name={name} jobTitle={jobTitle} id={id} />
+        ))}
       </Users>
     </Box>
   );
@@ -38,5 +34,5 @@ export const Dashboard: FC = () => {
 const wrapperProps = {
   display: "flex",
   flexDirection: "column",
-  p: 1,
+  p: 1
 };

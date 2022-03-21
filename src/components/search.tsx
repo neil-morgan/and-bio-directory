@@ -15,8 +15,8 @@ export const Search: FC = () => {
 
     fetchBio({
       variables: {
-        name: bioSearched,
-      },
+        name: bioSearched
+      }
     });
   };
 
@@ -28,7 +28,7 @@ export const Search: FC = () => {
         type="text"
         name="search"
         placeholder="Name..."
-        onChange={(event) => {
+        onChange={event => {
           setBioSearched(event.target.value);
         }}
       />

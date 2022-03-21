@@ -1,7 +1,14 @@
 {
-    "html.autoClosingTags": false,
-    "typescript.autoClosingTags": false,
-    "javascript.autoClosingTags": false,
-    "editor.formatOnSave": true,
-    "editor.autoClosingBrackets": "never"
-  }
+  "html.autoClosingTags": false,
+  "typescript.autoClosingTags": false,
+  "javascript.autoClosingTags": false,
+  "editor.formatOnSave": true,
+  "editor.autoClosingBrackets": "never",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "html",
+    "typescriptreact",
+    "typescript"
+  ]
+}

@@ -1,10 +1,9 @@
-import type { FC } from "react";
-import type { UserProps } from "types";
-import { blue, grey } from "@mui/material/colors";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForwardIos";
-
-import { Link } from "react-router-dom";
 import { Box, Typography, Link as MuiLink } from "@mui/material";
+import { blue, grey } from "@mui/material/colors";
+import type { FC } from "react";
+import { Link } from "react-router-dom";
+import type { UserProps } from "types";
 
 export const User: FC<UserProps> = ({ name, jobTitle, id }) => {
   return (
@@ -32,11 +31,6 @@ const wrapper = {
   textDecoration: "none",
   transition: "ease 250ms",
   "&:hover": {
-    color: blue[500],
-  },
-};
-
-const label = {
-  display: "flex",
-  flexDirection: "column",
+    color: blue[500]
+  }
 };

@@ -6,21 +6,23 @@ export const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         "#root": {
-          display: "flex",
-        },
-      },
-    },
+          display: "flex"
+        }
+      }
+    }
   },
 
   palette: {
     primary: {
-      main: blue[500],
+      main: blue[500]
     },
     secondary: {
-      main: green[500],
+      main: green[500]
     },
     error: {
-      main: red.A400,
-    },
-  },
+      main: red.A400
+    }
+  }
 });
+
+export { modalBoxStyle } from "./styles";
