@@ -17,9 +17,19 @@ export const Dashboard: FC = () => {
     <Box sx={wrapperProps}>
       <Search />
       <Users>
-        {data?.users.map((user: { name: string; id: number }) => (
-          <User key={uuid()} name={user.name} id={user.id} />
-        ))}
+        {data?.users.map(
+          ({
+            name,
+            id,
+            job_title,
+          }: {
+            name: string;
+            job_title: string;
+            id: number;
+          }) => (
+            <User key={uuid()} name={name} jobTitle={job_title} id={id} />
+          )
+        )}
       </Users>
     </Box>
   );

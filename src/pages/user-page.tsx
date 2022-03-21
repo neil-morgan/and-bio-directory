@@ -56,7 +56,9 @@ export const UserPage: FC = () => {
       <Typography variant="h6">ID: {data.user.id}</Typography>
       <Typography variant="h4">{data.user.name}'s page</Typography>
 
-      <Button variant="contained" onClick={handleClick}>
+      <Button variant="contained">Update User</Button>
+
+      <Button variant="contained" color="error" onClick={handleClick}>
         Delete User
       </Button>
       <Popover

@@ -1,29 +1,42 @@
 import type { FC } from "react";
 import type { UserProps } from "types";
+import { blue, grey } from "@mui/material/colors";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForwardIos";
 
-import { v4 as uuid } from "uuid";
 import { Link } from "react-router-dom";
-import { Box, Link as MuiLink, Typography } from "@mui/material";
+import { Box, Typography, Link as MuiLink } from "@mui/material";
 
-export const User: FC<UserProps> = ({ name, id }) => {
+export const User: FC<UserProps> = ({ name, jobTitle, id }) => {
   return (
-    <Box key={uuid()} sx={wrapper}>
-      <Typography>
-        id: {id} - name: {name}
-      </Typography>
-
-      <Link to={`/${id}`}>
-        <MuiLink sx={link}>See more</MuiLink>
-      </Link>
-    </Box>
+    <MuiLink component={Link} sx={wrapper} to={`/${id}`}>
+      <Box>
+        <Typography variant="h6">{name}</Typography>
+        <Typography variant="subtitle2">{jobTitle}</Typography>{" "}
+      </Box>
+      <ArrowForwardIcon fontSize="small" />
+    </MuiLink>
   );
 };
 
 const wrapper = {
   display: "flex",
-  mb: 2,
+  width: "100%",
+  justifyContent: "space-between",
+  alignItems: "center",
+  mb: 1,
+  py: 1 / 2,
+  px: 1,
+  color: grey[700],
+  bgcolor: grey[100],
+  borderRadius: 1,
+  textDecoration: "none",
+  transition: "ease 250ms",
+  "&:hover": {
+    color: blue[500],
+  },
 };
 
-const link = {
-  ml: 1,
+const label = {
+  display: "flex",
+  flexDirection: "column",
 };

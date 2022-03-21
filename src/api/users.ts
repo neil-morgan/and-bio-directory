@@ -22,6 +22,7 @@ export const GET_USERS = gql`
     users {
       id
       name
+      job_title
     }
   }
 `;
@@ -31,6 +32,7 @@ export const GET_USER = gql`
     user(id: $id) {
       id
       name
+      job_title
     }
   }
 `;
