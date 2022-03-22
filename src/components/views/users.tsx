@@ -1,6 +1,6 @@
 import { Box, Button, Typography, Modal } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { UserCreate } from "components";
+import { UserCreate } from "components/views";
 import type { FC } from "react";
 import { useState } from "react";
 import { modalBoxStyle } from "theme";

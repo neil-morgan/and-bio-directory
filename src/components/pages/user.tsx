@@ -8,7 +8,7 @@ import {
   Typography
 } from "@mui/material";
 import { DELETE_USER, GET_USER } from "api";
-import { UserUpdate } from "components";
+import { UserUpdate } from "components/views";
 import type { FC } from "react";
 import { useState, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";

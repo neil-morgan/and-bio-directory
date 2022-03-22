@@ -1,10 +1,10 @@
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import { Dashboard, UserPage } from "pages";
+import { App } from "components/pages";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { theme } from "theme";
 
 import "@fontsource/roboto/300.css";
@@ -18,7 +18,7 @@ import "@fontsource/roboto/700.css";
     uri:
       process.env.NODE_ENV === "production"
         ? "https://and-bio-directory.herokuapp.com/"
-        : "http://localhost:4000/graphql",
+        : "http://localhost:4000/graphql"
   });
 
   ReactDOM.render(
@@ -27,10 +27,7 @@ import "@fontsource/roboto/700.css";
         <ThemeProvider theme={theme}>
           <BrowserRouter>
             <CssBaseline />
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/:userId" element={<UserPage />} />
-            </Routes>
+            <App />
           </BrowserRouter>
         </ThemeProvider>
       </ApolloProvider>
