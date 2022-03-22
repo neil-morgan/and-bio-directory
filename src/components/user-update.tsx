@@ -43,7 +43,7 @@ export const UserUpdate: FC<Props> = ({
 
     updateUser({
       variables: {
-        input: { id: Number(id), name: inputs.name, jobTitle: inputs.jobTitle }
+        input: { id, name: inputs.name, jobTitle: inputs.jobTitle }
       }
     });
     setInputs(defaultNewUser);
