@@ -1,12 +1,12 @@
 import { Box, Button, Typography, Modal } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { styled } from "@mui/material/styles";
 import { UserCreate } from "components/views";
 import type { FC } from "react";
 import { useState } from "react";
 import { modalBoxStyle } from "theme";
-import type { UsersProps } from "types";
+import type { ReactChildrenProps } from "types";
 
-export const Users: FC<UsersProps> = ({ children }) => {
+export const Users: FC<ReactChildrenProps> = ({ children }) => {
   const [open, setOpen] = useState(false);
 
   const handleModalOpen = () => {
@@ -19,8 +19,8 @@ export const Users: FC<UsersProps> = ({ children }) => {
 
   return (
     <>
-      <Box sx={usersBox}>
-        <Typography sx={usersTitle} variant="h5">
+      <UsersBox>
+        <Typography sx={usersTitle} variant="h4">
           All users
         </Typography>
         {children}
@@ -32,7 +32,7 @@ export const Users: FC<UsersProps> = ({ children }) => {
         >
           Add new user
         </Button>
-      </Box>
+      </UsersBox>
 
       <Modal open={open} onClose={handleModalClose}>
         <Box sx={modalBoxStyle}>
@@ -43,15 +43,16 @@ export const Users: FC<UsersProps> = ({ children }) => {
   );
 };
 
-const usersBox = {
+const UsersBox = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  p: 2,
-  bgcolor: grey[50],
-  my: 2,
-  borderRadius: 2
-};
+  padding: theme.spacing(2),
+  borderRadius: 5,
+  backgroundColor: theme.palette.grey[50],
+  marginTop: theme.spacing(2),
+  marginBottom: theme.spacing(2)
+}));
 
 const usersTitle = {
   mb: 2,

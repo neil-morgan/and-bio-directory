@@ -1,15 +1,12 @@
-import type { FC, ReactNode } from "react";
+import type { FC } from "react";
+import type { ReactChildrenProps } from "types";
 
-import { Header } from "./header";
+import { Header, Footer, Main } from ".";
 
-export type LayoutProps = {
-  children?: ReactNode | ReactNode[];
-};
-
-export const Layout: FC<LayoutProps> = ({ children }) => (
-  <div>
+export const Layout: FC<ReactChildrenProps> = ({ children }) => (
+  <>
     <Header />
-    <main>{children}</main>
-    {/* footer */}
-  </div>
+    <Main>{children}</Main>
+    <Footer />
+  </>
 );

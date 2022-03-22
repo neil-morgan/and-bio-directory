@@ -1,45 +1,58 @@
-import { useLazyQuery } from "@apollo/client";
-import { GET_USER_BY_NAME } from "api";
+import SearchIcon from "@mui/icons-material/Search";
+import { InputBase } from "@mui/material";
+import { styled, alpha } from "@mui/material/styles";
 import type { FC } from "react";
-import { useState } from "react";
 
-export const Search: FC = () => {
-  const [bioSearched, setBioSearched] = useState("");
-  const [fetchBio, { data: fetchedBio, error: fetchBioError }] =
-    useLazyQuery(GET_USER_BY_NAME);
+export const Search: FC = () => (
+  <SearchInput>
+    <SearchIconWrapper>
+      <SearchIcon />
+    </SearchIconWrapper>
+    <StyledInputBase
+      placeholder="Search…"
+      inputProps={{ "aria-label": "search" }}
+    />
+  </SearchInput>
+);
 
-  const handleSearch = () => {
-    if (bioSearched === "") {
-      return;
-    }
+const SearchInput = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25)
+  },
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto"
+  }
+}));
 
-    fetchBio({
-      variables: {
-        name: bioSearched
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center"
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "12ch",
+      "&:focus": {
+        width: "20ch"
       }
-    });
-  };
-
-  return (
-    <div>
-      <label htmlFor="search">search user</label>
-      <input
-        aria-label="Search"
-        type="text"
-        name="search"
-        placeholder="Name..."
-        onChange={event => {
-          setBioSearched(event.target.value);
-        }}
-      />
-
-      <button type="button" onClick={handleSearch}>
-        Search
-      </button>
-      <div>
-        {fetchedBio && <div>Result found: {fetchedBio.userByName.name}</div>}
-        {fetchBioError && <div> There was an error fetching the data</div>}
-      </div>
-    </div>
-  );
-};
+    }
+  }
+}));

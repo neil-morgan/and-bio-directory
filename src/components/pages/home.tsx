@@ -1,8 +1,8 @@
 import { useQuery } from "@apollo/client";
-import { Box } from "@mui/material";
 import { GET_USERS } from "api";
-import { User, Users, Search } from "components/views";
+import { User, Users } from "components/views";
 import type { FC } from "react";
+import type { UserProps } from "types";
 import { v4 as uuid } from "uuid";
 
 export const HomePage: FC = () => {
@@ -13,26 +13,11 @@ export const HomePage: FC = () => {
     return <span>Data loading please wait...</span>;
   }
 
-  type DashboardProps = {
-    name: string;
-    jobTitle: string;
-    id: number;
-  };
-
   return (
-    <Box sx={wrapperProps}>
-      <Search />
-      <Users>
-        {data?.users.map(({ name, id, jobTitle }: DashboardProps) => (
-          <User key={uuid()} name={name} jobTitle={jobTitle} id={id} />
-        ))}
-      </Users>
-    </Box>
+    <Users>
+      {data?.users.map(({ name, id, jobTitle }: UserProps) => (
+        <User key={uuid()} name={name} jobTitle={jobTitle} id={id} />
+      ))}
+    </Users>
   );
-};
-
-const wrapperProps = {
-  display: "flex",
-  flexDirection: "column",
-  p: 1
 };

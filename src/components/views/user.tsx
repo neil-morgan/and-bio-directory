@@ -1,36 +1,37 @@
 import ArrowForwardIcon from "@mui/icons-material/ArrowForwardIos";
-import { Box, Typography, Link as MuiLink } from "@mui/material";
-import { blue, grey } from "@mui/material/colors";
+import { Box, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import type { FC } from "react";
 import { Link } from "react-router-dom";
 import type { UserProps } from "types";
 
-export const User: FC<UserProps> = ({ name, jobTitle, id }) => {
-  return (
-    <MuiLink component={Link} sx={wrapper} to={`/${id}`}>
-      <Box>
-        <Typography variant="h6">{name}</Typography>
-        <Typography variant="subtitle2">{jobTitle}</Typography>{" "}
-      </Box>
-      <ArrowForwardIcon fontSize="small" />
-    </MuiLink>
-  );
-};
+export const User: FC<UserProps> = ({ name, jobTitle, id }) => (
+  <Wrapper to={`/${id}`}>
+    <Box>
+      <Typography variant="h6">{name}</Typography>
+      <Typography variant="subtitle2">{jobTitle}</Typography>{" "}
+    </Box>
+    <ArrowForwardIcon fontSize="small" />
+  </Wrapper>
+);
 
-const wrapper = {
+const Wrapper = styled(Link)(({ theme }) => ({
   display: "flex",
   width: "100%",
   justifyContent: "space-between",
   alignItems: "center",
-  mb: 1,
-  py: 1 / 2,
-  px: 1,
-  color: grey[700],
-  bgcolor: grey[100],
+  marginBottom: theme.spacing(1),
+  paddingTop: theme.spacing(1 / 2),
+  paddingBottom: theme.spacing(1 / 2),
+  paddingLeft: theme.spacing(1),
+  paddingRight: theme.spacing(1),
+  color: theme.palette.grey[700],
+  backgroundColor: theme.palette.grey[100],
   borderRadius: 1,
   textDecoration: "none",
   transition: "ease 250ms",
+
   "&:hover": {
-    color: blue[500]
+    color: theme.palette.secondary.main
   }
-};
+}));

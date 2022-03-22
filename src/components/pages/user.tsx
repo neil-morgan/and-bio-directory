@@ -52,67 +52,66 @@ export const UserPage: FC = () => {
     <CircularProgress />
   ) : (
     <>
-      <Box sx={wrapper}>
-        <Link to="/">
-          <Typography>back</Typography>
-        </Link>
-        <Typography variant="h6">ID: {data.user.id}</Typography>
-        <Typography variant="h4">{data.user.name}'s page</Typography>
-        <Typography variant="subtitle2">{data.user.jobTitle}</Typography>
+      <Link to="/">
+        <Typography>back</Typography>
+      </Link>
+      <Typography variant="h6">ID: {data.user.id}</Typography>
+      <Typography variant="h4">{data.user.name}'s page</Typography>
+      <Typography variant="subtitle2">{data.user.jobTitle}</Typography>
 
-        <Button
-          variant="contained"
-          onClick={() => {
-            handleModalOpen();
-          }}
-        >
-          Update User
-        </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => {
+          handleModalOpen();
+        }}
+      >
+        Update User
+      </Button>
 
-        <Button
-          ref={deleteRef}
-          variant="contained"
-          color="error"
-          onClick={() => {
-            setAnchorEl(deleteRef.current);
-          }}
-        >
-          Delete User
-        </Button>
-        <Popover
-          open={popoverOpen}
-          anchorEl={anchorEl}
-          onClose={handlePopoverClose}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "center"
-          }}
-          transformOrigin={{
-            vertical: "bottom",
-            horizontal: "center"
-          }}
-        >
-          <Box sx={popover}>
-            <Typography sx={popoverTitle} variant="h6">
-              Are you sure?
-            </Typography>
-            <Button variant="outlined" onClick={handlePopoverClose}>
-              Cancel
-            </Button>
-            <Button
-              sx={button}
-              variant="contained"
-              color="error"
-              onClick={() => {
-                handleDeleteUser(data.user.id);
-                navigate("/");
-              }}
-            >
-              Delete
-            </Button>
-          </Box>
-        </Popover>
-      </Box>
+      <Button
+        ref={deleteRef}
+        variant="contained"
+        color="error"
+        onClick={() => {
+          setAnchorEl(deleteRef.current);
+        }}
+      >
+        Delete User
+      </Button>
+      <Popover
+        open={popoverOpen}
+        anchorEl={anchorEl}
+        onClose={handlePopoverClose}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center"
+        }}
+        transformOrigin={{
+          vertical: "bottom",
+          horizontal: "center"
+        }}
+      >
+        <Box sx={popover}>
+          <Typography sx={popoverTitle} variant="h6">
+            Are you sure?
+          </Typography>
+          <Button variant="outlined" onClick={handlePopoverClose}>
+            Cancel
+          </Button>
+          <Button
+            sx={button}
+            variant="contained"
+            color="error"
+            onClick={() => {
+              handleDeleteUser(data.user.id);
+              navigate("/");
+            }}
+          >
+            Delete
+          </Button>
+        </Box>
+      </Popover>
 
       <Modal open={modalOpen} onClose={handleModalClose}>
         <Box sx={modalBoxStyle}>
@@ -126,11 +125,6 @@ export const UserPage: FC = () => {
       </Modal>
     </>
   );
-};
-
-const wrapper = {
-  display: "flex",
-  flexDirection: "column"
 };
 
 const popover = {

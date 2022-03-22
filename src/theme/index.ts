@@ -1,4 +1,4 @@
-import { red, blue, green, grey } from "@mui/material/colors";
+import { red, blue, green } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
@@ -6,7 +6,9 @@ export const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         "#root": {
-          display: "flex"
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh"
         }
       }
     }
@@ -14,10 +16,10 @@ export const theme = createTheme({
 
   palette: {
     primary: {
-      main: blue[500]
+      main: "#D82036"
     },
     secondary: {
-      main: green[500]
+      main: "#1f73c2"
     },
     error: {
       main: red.A400
