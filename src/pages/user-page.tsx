@@ -20,8 +20,13 @@ export const UserPage: FC = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteUser] = useMutation(DELETE_USER, updateUsers());
+  const { data, loading } = useQuery(GET_USER, {
+    variables: { id: userId }
+  });
 
   const deleteRef = useRef(null);
+  const popoverOpen = Boolean(anchorEl);
 
   const handlePopoverClose = () => {
     setAnchorEl(null);
@@ -34,14 +39,6 @@ export const UserPage: FC = () => {
   const handleModalClose = () => {
     setModalOpen(false);
   };
-
-  const popoverOpen = Boolean(anchorEl);
-  const id = popoverOpen ? "simple-popover" : undefined;
-  const { loading, data } = useQuery(GET_USER, {
-    variables: { id: userId }
-  });
-
-  const [deleteUser] = useMutation(DELETE_USER, updateUsers());
 
   const handleDeleteUser = (id: number) => {
     deleteUser({
@@ -61,6 +58,7 @@ export const UserPage: FC = () => {
         </Link>
         <Typography variant="h6">ID: {data.user.id}</Typography>
         <Typography variant="h4">{data.user.name}'s page</Typography>
+        <Typography variant="subtitle2">{data.user.jobTitle}</Typography>
 
         <Button
           variant="contained"
@@ -82,7 +80,6 @@ export const UserPage: FC = () => {
           Delete User
         </Button>
         <Popover
-          id={id}
           open={popoverOpen}
           anchorEl={anchorEl}
           onClose={handlePopoverClose}
@@ -119,7 +116,12 @@ export const UserPage: FC = () => {
 
       <Modal open={modalOpen} onClose={handleModalClose}>
         <Box sx={modalBoxStyle}>
-          <UserUpdate />
+          <UserUpdate
+            handleModalClose={handleModalClose}
+            id={Number(userId)}
+            name={data.user.name}
+            jobTitle={data.user.jobTitle}
+          />
         </Box>
       </Modal>
     </>

@@ -51,7 +51,7 @@ export const UserCreate: FC<Props> = ({ handleModalClose }) => {
       <TextField
         name="name"
         error={Boolean(errors.name)}
-        {...(errors.name && { helperText: errors.name })}
+        helperText={errors.name ? errors.name : "A-Z"}
         label="Name"
         size="small"
         value={inputs.name}
@@ -63,7 +63,7 @@ export const UserCreate: FC<Props> = ({ handleModalClose }) => {
         name="jobTitle"
         error={Boolean(errors.jobTitle)}
         {...(errors.jobTitle && { helperText: errors.jobTitle })}
-        label="Job Title"
+        label="Job title"
         size="small"
         value={inputs.jobTitle}
         onChange={handleInputChange}
@@ -78,7 +78,7 @@ export const UserCreate: FC<Props> = ({ handleModalClose }) => {
         }}
         sx={modalButtonStyle}
       >
-        Create User
+        Create
       </Button>
     </>
   );

@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
 export type UserProps = {
+  id?: number;
   name: string;
-  id: number;
   jobTitle: string;
 };
 
