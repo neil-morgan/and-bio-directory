@@ -57,25 +57,25 @@ export const UserUpdate: FC<Props> = ({
       </Typography>
 
       <TextField
-        name="name"
-        error={Boolean(errors.name)}
         {...(errors.name && { helperText: errors.name })}
+        error={Boolean(errors.name)}
         label="Name"
-        size="small"
-        value={inputs.name}
+        name="name"
         onChange={handleInputChange}
+        size="small"
         sx={modalInputStyle}
+        value={inputs.name}
       />
 
       <TextField
-        name="jobTitle"
-        error={Boolean(errors.jobTitle)}
         {...(errors.jobTitle && { helperText: errors.jobTitle })}
+        error={Boolean(errors.jobTitle)}
         label="Job title"
-        size="small"
-        value={inputs.jobTitle}
+        name="jobTitle"
         onChange={handleInputChange}
+        size="small"
         sx={modalInputStyle}
+        value={inputs.jobTitle}
       />
 
       <Button
