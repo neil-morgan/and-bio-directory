@@ -1,6 +1,6 @@
-import MenuIcon from "@mui/icons-material/Menu";
-import { Toolbar, Button, IconButton } from "@mui/material";
+import { Toolbar, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { SideDrawer } from "components/global";
 import type { FC } from "react";
 import { Link } from "react-router-dom";
 
@@ -10,10 +10,7 @@ export const Header: FC = () => (
       <Button component={Link} to="/" color="inherit" size="large">
         ANDi Bio Directory
       </Button>
-
-      <IconButton size="large" edge="start" color="inherit" aria-label="menu">
-        <MenuIcon />
-      </IconButton>
+      <SideDrawer />
     </Toolbar>
   </AppBar>
 );
