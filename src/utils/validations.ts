@@ -20,12 +20,12 @@ export const validateCreateUser = (inputs: UserProps): UserProps => {
         }
         break;
 
-      case "jobTitle":
-        if (inputs.jobTitle === "") {
-          return (errors.jobTitle = requiredText);
+      case "role":
+        if (inputs.role === "") {
+          return (errors.role = requiredText);
         }
-        if (!isAlpha(inputs.jobTitle, "en-GB", { ignore: alphaIgnore })) {
-          errors.jobTitle =
+        if (!isAlpha(inputs.role, "en-GB", { ignore: alphaIgnore })) {
+          errors.role =
             "You have entered an invalid job title. Please try again.";
         }
         break;
@@ -46,9 +46,9 @@ export const validateUpdateUser = (inputs: UserProps): UserProps => {
         }
         break;
 
-      case "jobTitle":
-        if (!isAlpha(inputs.jobTitle, "en-GB", { ignore: alphaIgnore })) {
-          errors.jobTitle =
+      case "role":
+        if (!isAlpha(inputs.role, "en-GB", { ignore: alphaIgnore })) {
+          errors.role =
             "You have entered an invalid job title. Please try again.";
         }
         break;

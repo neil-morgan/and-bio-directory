@@ -5,11 +5,11 @@ import type { FC } from "react";
 import { Link } from "react-router-dom";
 import type { UserProps } from "types";
 
-export const User: FC<UserProps> = ({ name, jobTitle, id }) => (
+export const User: FC<UserProps> = ({ name, role, id }) => (
   <Wrapper to={`/${id}`}>
     <Box>
       <Typography variant="h6">{name}</Typography>
-      <Typography variant="subtitle2">{jobTitle}</Typography>{" "}
+      <Typography variant="subtitle2">{role}</Typography>{" "}
     </Box>
     <ArrowForwardIcon fontSize="small" />
   </Wrapper>

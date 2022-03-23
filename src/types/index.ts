@@ -7,5 +7,5 @@ export type ReactChildrenProps = {
 export type UserProps = {
   id?: number;
   name: string;
-  jobTitle: string;
+  role: string;
 };

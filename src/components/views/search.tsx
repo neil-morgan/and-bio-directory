@@ -55,11 +55,9 @@ const SearchWrapper = styled("div")(({ theme }) => ({
   marginLeft: "auto",
   marginRight: "auto",
   marginTop: theme.spacing(6),
-
   flexDirection: "column",
   alignItems: "flex-start",
   borderRadius: 5,
-  backgroundColor: theme.palette.grey[100],
   padding: theme.spacing(2)
 }));
 
