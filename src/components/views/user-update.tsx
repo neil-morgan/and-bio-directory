@@ -8,17 +8,12 @@ import { defaultNewUser, updateUsers, validateUpdateUser } from "utils";
 type Props = {
   id: number;
   name: string;
-  jobTitle: string;
+  role: string;
   handleModalClose: () => void;
 };
 
-export const UserUpdate: FC<Props> = ({
-  handleModalClose,
-  id,
-  name,
-  jobTitle
-}) => {
-  const [inputs, setInputs] = useState({ name, jobTitle });
+export const UserUpdate: FC<Props> = ({ handleModalClose, id, name, role }) => {
+  const [inputs, setInputs] = useState({ name, role });
   const [errors, setErrors] = useState(defaultNewUser);
 
   const [updateUser] = useMutation(UPDATE_USER, updateUsers());
@@ -43,7 +38,7 @@ export const UserUpdate: FC<Props> = ({
 
     updateUser({
       variables: {
-        input: { id, name: inputs.name, jobTitle: inputs.jobTitle }
+        input: { id, name: inputs.name, role: inputs.role }
       }
     });
     setInputs(defaultNewUser);
@@ -68,14 +63,14 @@ export const UserUpdate: FC<Props> = ({
       />
 
       <TextField
-        {...(errors.jobTitle && { helperText: errors.jobTitle })}
-        error={Boolean(errors.jobTitle)}
+        {...(errors.role && { helperText: errors.role })}
+        error={Boolean(errors.role)}
         label="Job title"
-        name="jobTitle"
+        name="role"
         onChange={handleInputChange}
         size="small"
         sx={modalInputStyle}
-        value={inputs.jobTitle}
+        value={inputs.role}
       />
 
       <Button

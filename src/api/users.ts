@@ -1,21 +1,21 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_USER = gql`
-  mutation ($input: CreateUserData!) {
+  mutation ($input: createUserData!) {
     createUser(input: $input) {
       id
       name
-      jobTitle
+      role
     }
   }
 `;
 
 export const UPDATE_USER = gql`
-  mutation ($input: UpdateUserInput!) {
+  mutation ($input: updateUserData!) {
     updateUser(input: $input) {
       id
       name
-      jobTitle
+      role
     }
   }
 `;
@@ -33,7 +33,7 @@ export const GET_USERS = gql`
     users {
       id
       name
-      jobTitle
+      role
     }
   }
 `;
@@ -43,7 +43,7 @@ export const GET_USER = gql`
     user(id: $id) {
       id
       name
-      jobTitle
+      role
     }
   }
 `;

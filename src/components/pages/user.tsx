@@ -14,6 +14,7 @@ import { useState, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { modalBoxStyle } from "theme";
 import { updateUsers } from "utils";
+import { ProductDeveloper } from "components/templates";
 
 export const UserPage: FC = () => {
   const { userId } = useParams();
@@ -55,10 +56,12 @@ export const UserPage: FC = () => {
       <Link to="/">
         <Typography>back</Typography>
       </Link>
-      <Typography variant="h6">ID: {data.user.id}</Typography>
-      <Typography variant="h4">{data.user.name}'s page</Typography>
-      <Typography variant="subtitle2">{data.user.jobTitle}</Typography>
 
+      <ProductDeveloper
+        id={data.user.id}
+        name={data.user.name}
+        role={data.user.role}
+      />
       <Button
         variant="contained"
         color="secondary"
@@ -119,7 +122,7 @@ export const UserPage: FC = () => {
             handleModalClose={handleModalClose}
             id={Number(userId)}
             name={data.user.name}
-            jobTitle={data.user.jobTitle}
+            role={data.user.role}
           />
         </Box>
       </Modal>

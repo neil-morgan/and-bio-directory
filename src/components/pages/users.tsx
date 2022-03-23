@@ -15,8 +15,8 @@ export const UsersPage: FC = () => {
 
   return (
     <Users>
-      {data?.users.map(({ name, id, jobTitle }: UserProps) => (
-        <User key={uuid()} name={name} jobTitle={jobTitle} id={id} />
+      {data?.users.map(({ name, id, role }: UserProps) => (
+        <User key={uuid()} name={name} role={role} id={id} />
       ))}
     </Users>
   );
