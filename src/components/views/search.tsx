@@ -32,7 +32,7 @@ export const Search: FC = () => {
         sx={inputProps}
       />
 
-      <BasicSelect sx={{ ...inputProps, width: 200 }} />
+      <BasicSelect label="Seniority" sx={{ ...inputProps, minWidth: 120 }} />
 
       <Button variant="contained" size="large" sx={inputProps}>
         ANDi Search

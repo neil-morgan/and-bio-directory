@@ -1,18 +1,22 @@
-import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select
+} from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material/Select";
-import Select from "@mui/material/Select";
 import type { SxProps } from "@mui/system";
 import { useState } from "react";
 import type { FC } from "react";
 
 type BasicSelectProps = {
+  label: string;
   sx?: SxProps;
 };
 
-export const BasicSelect: FC<BasicSelectProps> = ({ sx }) => {
+export const BasicSelect: FC<BasicSelectProps> = ({ sx, label }) => {
   const [age, setAge] = useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -22,9 +26,9 @@ export const BasicSelect: FC<BasicSelectProps> = ({ sx }) => {
   return (
     <Box sx={sx}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Seniority</InputLabel>
+        <InputLabel>{label}</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
+          input={<OutlinedInput label={label} />}
           id="demo-simple-select"
           value={age}
           label="Age"
