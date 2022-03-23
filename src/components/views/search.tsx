@@ -1,6 +1,6 @@
 import { Button, Typography, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { MultiSelect } from "components/common";
+import { BasicSelect, MultiSelect } from "components/common";
 import { useState } from "react";
 import type { FC } from "react";
 
@@ -31,6 +31,8 @@ export const Search: FC = () => {
         state={traits}
         sx={inputProps}
       />
+
+      <BasicSelect sx={{ ...inputProps, width: 200 }} />
 
       <Button variant="contained" size="large" sx={inputProps}>
         ANDi Search
