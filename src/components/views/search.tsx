@@ -1,58 +1,53 @@
-import SearchIcon from "@mui/icons-material/Search";
-import { InputBase } from "@mui/material";
-import { styled, alpha } from "@mui/material/styles";
+import { Button, Typography, TextField } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { MultiSelect } from "components/common";
+import { useState } from "react";
 import type { FC } from "react";
 
-export const Search: FC = () => (
-  <SearchInput>
-    <SearchIconWrapper>
-      <SearchIcon />
-    </SearchIconWrapper>
-    <StyledInputBase
-      placeholder="Search…"
-      inputProps={{ "aria-label": "search" }}
-    />
-  </SearchInput>
-);
+export const Search: FC = () => {
+  const [traits, setTraits] = useState<string[]>([]);
+  const [toolkit, setToolkit] = useState<string[]>([]);
 
-const SearchInput = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25)
-  },
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(1),
-    width: "auto"
-  }
-}));
+  return (
+    <SearchWrapper>
+      <Typography variant="h5">Explore our ANDi's</Typography>
+      <TextField
+        label="Search term"
+        name="searchTerm"
+        size="medium"
+        sx={inputProps}
+      />
+      <MultiSelect
+        fields={["React", "Javascript", "Typescript", "GraphQL"]}
+        label="Skills"
+        setState={setToolkit}
+        state={toolkit}
+        sx={inputProps}
+      />
+      <MultiSelect
+        fields={["Approachable", "Progressive", "Ambitious", "Thoughtful"]}
+        label="Traits"
+        setState={setTraits}
+        state={traits}
+        sx={inputProps}
+      />
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
+      <Button variant="contained" size="large" sx={inputProps}>
+        ANDi Search
+      </Button>
+    </SearchWrapper>
+  );
+};
+
+const SearchWrapper = styled("div")(({ theme }) => ({
   display: "flex",
-  alignItems: "center",
-  justifyContent: "center"
+  flexDirection: "column",
+  alignItems: "flex-start",
+  borderRadius: 5,
+  backgroundColor: theme.palette.grey[100],
+  padding: theme.spacing(2)
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch"
-      }
-    }
-  }
-}));
+const inputProps = {
+  mt: 2
+};
