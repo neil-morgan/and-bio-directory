@@ -1,7 +1,9 @@
 import MenuIcon from "@mui/icons-material/Menu";
-import { Drawer, IconButton } from "@mui/material";
+import { Box, Drawer, Button, IconButton } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import type { FC } from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export const SideDrawer: FC = () => {
   const [open, setOpen] = useState(false);
@@ -26,8 +28,25 @@ export const SideDrawer: FC = () => {
           setOpen(false);
         }}
       >
-        Side nav
+        <DrawerInternal>
+          <Button
+            component={Link}
+            to="/users"
+            onClick={() => {
+              setOpen(false);
+            }}
+            color="inherit"
+            size="large"
+          >
+            Users
+          </Button>
+        </DrawerInternal>
       </Drawer>
     </>
   );
 };
+
+const DrawerInternal = styled(Box)(({ theme }) => ({
+  width: 300,
+  padding: theme.spacing(2)
+}));
