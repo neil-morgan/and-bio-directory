@@ -8,38 +8,44 @@ import {
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import type { SxProps } from "@mui/system";
-import { useState } from "react";
+import { styled } from "@mui/material/styles";
 import type { FC } from "react";
+import { v4 as uuid } from "uuid";
 
 type BasicSelectProps = {
+  fields: string[];
   label: string;
+  setState: (selection: string) => void;
+  state: string;
   sx?: SxProps;
 };
 
-export const BasicSelect: FC<BasicSelectProps> = ({ sx, label }) => {
-  const [age, setAge] = useState("");
-
+export const BasicSelect: FC<BasicSelectProps> = ({
+  fields,
+  label,
+  setState,
+  state,
+  sx
+}) => {
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
+    setState(event.target.value);
   };
 
   return (
-    <Box sx={sx}>
-      <FormControl fullWidth>
-        <InputLabel>{label}</InputLabel>
-        <Select
-          input={<OutlinedInput label={label} />}
-          id="demo-simple-select"
-          value={age}
-          label="Age"
-          onChange={handleChange}
-        >
-          <MenuItem value="associate">Associate</MenuItem>
-          <MenuItem value="middle">Middle</MenuItem>
-          <MenuItem value="senior">Senior</MenuItem>
-          <MenuItem value="principle">Principle</MenuItem>
-        </Select>
-      </FormControl>
-    </Box>
+    <FormControl sx={sx}>
+      <InputLabel>{label}</InputLabel>
+      <Select
+        input={<OutlinedInput label={label} />}
+        value={state}
+        label={label}
+        onChange={handleChange}
+      >
+        {fields.map(item => (
+          <MenuItem key={uuid()} value={item.toLowerCase()}>
+            {item}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };

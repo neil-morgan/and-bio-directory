@@ -11,6 +11,7 @@ import type { SelectChangeEvent } from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 import type { SxProps } from "@mui/system";
 import type { FC } from "react";
+import { v4 as uuid } from "uuid";
 
 type MultiSelectProps = {
   fields: string[];
@@ -35,7 +36,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
   };
 
   return (
-    <Wrapper sx={sx}>
+    <FormControl sx={sx}>
       <InputLabel>{label}</InputLabel>
       <Select
         multiple
@@ -45,27 +46,22 @@ export const MultiSelect: FC<MultiSelectProps> = ({
         renderValue={selected => (
           <ChipBox>
             {selected.map(value => (
-              <Chip key={value} label={value} />
+              <Chip key={value} label={value} sx={{ mr: 0.5, my: 0.5 }} />
             ))}
           </ChipBox>
         )}
       >
         {fields.map(name => (
-          <MenuItem key={name} value={name}>
+          <MenuItem key={uuid()} value={name}>
             {name}
           </MenuItem>
         ))}
       </Select>
-    </Wrapper>
+    </FormControl>
   );
 };
 
-const Wrapper = styled(FormControl)(() => ({
-  width: 300
-}));
-
 const ChipBox = styled(Box)(() => ({
   display: "flex",
-  flexWrap: "wrap",
-  gap: 0.5
+  flexWrap: "wrap"
 }));
