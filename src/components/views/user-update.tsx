@@ -6,7 +6,7 @@ import { useState } from "react";
 import { defaultNewUser, updateUsers, validateUpdateUser } from "utils";
 
 type Props = {
-  id: number;
+  id: string;
   name: string;
   role: string;
   handleModalClose: () => void;
@@ -36,9 +36,11 @@ export const UserUpdate: FC<Props> = ({ handleModalClose, id, name, role }) => {
       return;
     }
 
+    const payload = { id, name: inputs.name, role: inputs.role };
+
     updateUser({
       variables: {
-        input: { id, name: inputs.name, role: inputs.role }
+        input: payload
       }
     });
     setInputs(defaultNewUser);

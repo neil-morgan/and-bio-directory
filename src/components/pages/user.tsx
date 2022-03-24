@@ -8,13 +8,13 @@ import {
   Typography
 } from "@mui/material";
 import { DELETE_USER, GET_USER } from "api";
+import { ProductDeveloper } from "components/templates";
 import { UserUpdate } from "components/views";
 import type { FC } from "react";
 import { useState, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { modalBoxStyle } from "theme";
 import { updateUsers } from "utils";
-import { ProductDeveloper } from "components/templates";
 
 export const UserPage: FC = () => {
   const { userId } = useParams();
@@ -108,7 +108,7 @@ export const UserPage: FC = () => {
             color="error"
             onClick={() => {
               handleDeleteUser(data.user.id);
-              navigate("/");
+              navigate("/users");
             }}
           >
             Delete
@@ -116,16 +116,18 @@ export const UserPage: FC = () => {
         </Box>
       </Popover>
 
-      <Modal open={modalOpen} onClose={handleModalClose}>
-        <Box sx={modalBoxStyle}>
-          <UserUpdate
-            handleModalClose={handleModalClose}
-            id={Number(userId)}
-            name={data.user.name}
-            role={data.user.role}
-          />
-        </Box>
-      </Modal>
+      {userId && (
+        <Modal open={modalOpen} onClose={handleModalClose}>
+          <Box sx={modalBoxStyle}>
+            <UserUpdate
+              handleModalClose={handleModalClose}
+              id={userId}
+              name={data.user.name}
+              role={data.user.role}
+            />
+          </Box>
+        </Modal>
+      )}
     </>
   );
 };
