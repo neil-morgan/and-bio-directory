@@ -14,14 +14,14 @@ import type { FC } from "react";
 import { useState, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { modalBoxStyle } from "theme";
-import { updateUsers } from "utils";
+import { refetchUsers } from "utils";
 
 export const UserPage: FC = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [deleteUser] = useMutation(DELETE_USER, updateUsers());
+  const [deleteUser] = useMutation(DELETE_USER, refetchUsers());
   const { data, loading } = useQuery(GET_USER, {
     variables: { id: userId }
   });

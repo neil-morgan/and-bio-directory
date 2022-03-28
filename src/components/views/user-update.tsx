@@ -4,7 +4,7 @@ import { UPDATE_USER } from "api";
 import type { FC } from "react";
 import { useState } from "react";
 import type { UserProps } from "types";
-import { defaultNewUser, updateUsers, validateUserForm } from "utils";
+import { defaultNewUser, refetchUsers, validateUserForm } from "utils";
 
 type UserUpdateProps = {
   handleModalClose: () => void;
@@ -20,7 +20,7 @@ export const UserUpdate: FC<UserUpdateProps> = ({
   const [inputs, setInputs] = useState({ name, surname, role });
   const [errors, setErrors] = useState(defaultNewUser);
 
-  const [updateUser] = useMutation(UPDATE_USER, updateUsers());
+  const [updateUser] = useMutation(UPDATE_USER, refetchUsers());
 
   const handleInputChange = (event: {
     target: HTMLInputElement | HTMLTextAreaElement;

@@ -3,7 +3,7 @@ import { Button, Typography, TextField } from "@mui/material";
 import { CREATE_USER } from "api";
 import type { FC } from "react";
 import { useState } from "react";
-import { defaultNewUser, updateUsers, validateUserForm } from "utils";
+import { defaultNewUser, refetchUsers, validateUserForm } from "utils";
 
 type UserCreateProps = {
   handleModalClose: () => void;
@@ -13,7 +13,7 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
   const [inputs, setInputs] = useState(defaultNewUser);
   const [errors, setErrors] = useState(defaultNewUser);
 
-  const [createUser] = useMutation(CREATE_USER, updateUsers());
+  const [createUser] = useMutation(CREATE_USER, refetchUsers());
 
   const handleInputChange = (event: {
     target: HTMLInputElement | HTMLTextAreaElement;
