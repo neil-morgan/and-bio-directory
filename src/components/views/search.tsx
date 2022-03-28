@@ -1,13 +1,29 @@
+import { useQuery } from "@apollo/client";
 import { Button, Typography, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { GET_USERS } from "api";
 import { BasicSelect, MultiSelect } from "components/common";
-import { useState } from "react";
+// import Fuse from "fuse.js";
+import { useEffect, useState } from "react";
 import type { FC } from "react";
+import type { UserProps } from "types";
+import { v4 as uuid } from "uuid";
 
 export const Search: FC = () => {
+  const { data } = useQuery(GET_USERS);
+  const [searchResults, setSearchResults] = useState([]);
   const [seniority, setSeniority] = useState<string>("");
   const [traits, setTraits] = useState<string[]>([]);
   const [toolkit, setToolkit] = useState<string[]>([]);
+
+  // run a live search result feed here?
+  // or click search and navigate to a new page?
+
+  useEffect(() => {
+    if (data) {
+      setSearchResults(data.users);
+    }
+  }, [data]);
 
   return (
     <SearchWrapper>
@@ -45,6 +61,14 @@ export const Search: FC = () => {
       <Button variant="contained" size="large" sx={buttonStyles}>
         ANDi Search
       </Button>
+
+      {searchResults && (
+        <div>
+          {searchResults.map((user: UserProps) => (
+            <div key={uuid()}>{user.name}</div>
+          ))}
+        </div>
+      )}
     </SearchWrapper>
   );
 };
