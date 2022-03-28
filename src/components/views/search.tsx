@@ -21,7 +21,7 @@ type SearchProps = {
 export const Search: FC = () => {
   const { data, loading } = useQuery(GET_USERS);
   const [searchResults, setSearchResults] = useState<SearchProps>([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [seniority, setSeniority] = useState<string>("");
   const [traits, setTraits] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
