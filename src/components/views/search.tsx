@@ -31,6 +31,11 @@ export const Search: FC = () => {
   const [traits, setTraits] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
 
+  // ? maybe .flat() here?
+  const searchMap = [searchQuery, seniority, traits.join(" "), skills.join(" ")]
+    .join(" ")
+    .trim();
+
   const handleInputChange = (event: {
     target: HTMLInputElement | HTMLTextAreaElement;
   }) => {
@@ -48,17 +53,8 @@ export const Search: FC = () => {
       keys: searchKeys
     });
 
-    const searchMap = [
-      searchQuery,
-      seniority,
-      traits.join(" "),
-      skills.join(" ")
-    ]
-      .join(" ")
-      .trim();
-
     setSearchResults(searchIndex.search(searchMap));
-  }, [data, searchQuery, traits, seniority, skills]);
+  }, [data, searchMap]);
 
   return loading ? (
     <CircularProgress />
@@ -94,6 +90,10 @@ export const Search: FC = () => {
         setState={setSeniority}
         sx={{ ...inputStyles, minWidth: 120 }}
       />
+
+      {searchMap.length > 0 && searchResults.length === 0 && (
+        <Typography>Sorry, no results found</Typography>
+      )}
 
       {searchResults.length > 0 &&
         Array.isArray(searchResults) &&
