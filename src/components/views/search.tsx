@@ -1,14 +1,13 @@
 import { useQuery } from "@apollo/client";
-import { Button, Typography, TextField, CircularProgress } from "@mui/material";
+import { Typography, TextField, CircularProgress } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { GET_USERS } from "api";
 import { BasicSelect, MultiSelect } from "components/common";
+import { UserItem } from "components/views";
 import Fuse from "fuse.js";
 import { useEffect, useState } from "react";
 import type { FC } from "react";
-import { Link } from "react-router-dom";
 import type { UserProps } from "types";
-import { UserItem } from "components/views";
 import {
   searchKeys,
   searchTraitsOptions,
@@ -125,12 +124,6 @@ const headingStyles = {
   width: "100%",
   textAlign: "center",
   py: 1
-};
-
-const buttonStyles = {
-  marginLeft: "auto",
-  marginRight: "auto",
-  my: 1
 };
 
 const inputStyles = {
