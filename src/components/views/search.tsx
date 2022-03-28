@@ -6,16 +6,20 @@ import { BasicSelect, MultiSelect } from "components/common";
 import Fuse from "fuse.js";
 import { useEffect, useState } from "react";
 import type { FC } from "react";
+import { Link } from "react-router-dom";
 import type { UserProps } from "types";
+import { UserItem } from "components/views";
 import {
   searchKeys,
   searchTraitsOptions,
   searchSkillsOptions,
   searchSeniorityOptions
 } from "utils";
+import { v4 as uuid } from "uuid";
 
 type SearchProps = {
   [key: number]: { item: UserProps };
+  length: number;
 };
 
 export const Search: FC = () => {
@@ -52,8 +56,6 @@ export const Search: FC = () => {
     setSearchResults(searchIndex.search(searchMap));
   }, [data, searchQuery, traits, seniority, skills]);
 
-  console.log(searchResults);
-
   return loading ? (
     <CircularProgress />
   ) : (
@@ -89,9 +91,20 @@ export const Search: FC = () => {
         sx={{ ...inputStyles, minWidth: 120 }}
       />
 
-      <Button variant="contained" size="large" sx={buttonStyles}>
-        ANDi Search
-      </Button>
+      {searchResults.length > 0 &&
+        Array.isArray(searchResults) &&
+        searchResults.map(({ item }) => {
+          const { id, name, surname, role } = item;
+          return (
+            <UserItem
+              key={uuid()}
+              name={name}
+              surname={surname}
+              role={role}
+              id={id}
+            />
+          );
+        })}
     </SearchWrapper>
   );
 };
