@@ -6,7 +6,7 @@ import { useState } from "react";
 import { modalBoxStyle } from "theme";
 import type { ReactChildrenProps } from "types";
 
-export const Users: FC<ReactChildrenProps> = ({ children }) => {
+export const UsersList: FC<ReactChildrenProps> = ({ children }) => {
   const [open, setOpen] = useState(false);
 
   const handleModalOpen = () => {
@@ -19,7 +19,7 @@ export const Users: FC<ReactChildrenProps> = ({ children }) => {
 
   return (
     <>
-      <UsersBox>
+      <Wrapper>
         <Typography sx={usersTitle} variant="h4">
           All users
         </Typography>
@@ -32,7 +32,7 @@ export const Users: FC<ReactChildrenProps> = ({ children }) => {
         >
           Add new user
         </Button>
-      </UsersBox>
+      </Wrapper>
 
       <Modal open={open} onClose={handleModalClose}>
         <Box sx={modalBoxStyle}>
@@ -43,7 +43,7 @@ export const Users: FC<ReactChildrenProps> = ({ children }) => {
   );
 };
 
-const UsersBox = styled("div")(({ theme }) => ({
+const Wrapper = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",

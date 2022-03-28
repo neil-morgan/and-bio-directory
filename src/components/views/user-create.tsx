@@ -3,13 +3,13 @@ import { Button, Typography, TextField } from "@mui/material";
 import { CREATE_USER } from "api";
 import type { FC } from "react";
 import { useState } from "react";
-import { defaultNewUser, updateUsers, validateCreateUser } from "utils";
+import { defaultNewUser, updateUsers, validateUserForm } from "utils";
 
-type Props = {
+type UserCreateProps = {
   handleModalClose: () => void;
 };
 
-export const UserCreate: FC<Props> = ({ handleModalClose }) => {
+export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
   const [inputs, setInputs] = useState(defaultNewUser);
   const [errors, setErrors] = useState(defaultNewUser);
 
@@ -25,7 +25,7 @@ export const UserCreate: FC<Props> = ({ handleModalClose }) => {
   };
 
   const handleSubmit = () => {
-    const validations = validateCreateUser(inputs);
+    const validations = validateUserForm(inputs, true);
     setErrors(validations);
 
     // // checks for validation errors
@@ -33,9 +33,15 @@ export const UserCreate: FC<Props> = ({ handleModalClose }) => {
       return;
     }
 
+    const payload = {
+      name: inputs.name,
+      surname: inputs.surname,
+      role: inputs.role
+    };
+
     createUser({
       variables: {
-        input: { name: inputs.name, role: inputs.role }
+        input: payload
       }
     });
     setInputs(defaultNewUser);
@@ -60,9 +66,20 @@ export const UserCreate: FC<Props> = ({ handleModalClose }) => {
       />
 
       <TextField
+        error={Boolean(errors.surname)}
+        helperText={errors.surname ? errors.surname : "A-Z"}
+        label="Surname"
+        name="surname"
+        onChange={handleInputChange}
+        size="small"
+        sx={modalInputStyle}
+        value={inputs.surname}
+      />
+
+      <TextField
         {...(errors.role && { helperText: errors.role })}
         error={Boolean(errors.role)}
-        label="Job title"
+        label="Role"
         name="role"
         onChange={handleInputChange}
         size="small"

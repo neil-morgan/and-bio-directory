@@ -60,6 +60,7 @@ export const UserPage: FC = () => {
       <ProductDeveloper
         id={data.user.id}
         name={data.user.name}
+        surname={data.user.surname}
         role={data.user.role}
       />
       <Button
@@ -123,6 +124,7 @@ export const UserPage: FC = () => {
               handleModalClose={handleModalClose}
               id={userId}
               name={data.user.name}
+              surname={data.user.surname}
               role={data.user.role}
             />
           </Box>

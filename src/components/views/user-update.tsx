@@ -3,17 +3,21 @@ import { Button, Typography, TextField } from "@mui/material";
 import { UPDATE_USER } from "api";
 import type { FC } from "react";
 import { useState } from "react";
-import { defaultNewUser, updateUsers, validateUpdateUser } from "utils";
+import type { UserProps } from "types";
+import { defaultNewUser, updateUsers, validateUserForm } from "utils";
 
-type Props = {
-  id: string;
-  name: string;
-  role: string;
+type UserUpdateProps = {
   handleModalClose: () => void;
-};
+} & UserProps;
 
-export const UserUpdate: FC<Props> = ({ handleModalClose, id, name, role }) => {
-  const [inputs, setInputs] = useState({ name, role });
+export const UserUpdate: FC<UserUpdateProps> = ({
+  handleModalClose,
+  id,
+  name,
+  surname,
+  role
+}) => {
+  const [inputs, setInputs] = useState({ name, surname, role });
   const [errors, setErrors] = useState(defaultNewUser);
 
   const [updateUser] = useMutation(UPDATE_USER, updateUsers());
@@ -28,7 +32,7 @@ export const UserUpdate: FC<Props> = ({ handleModalClose, id, name, role }) => {
   };
 
   const handleSubmit = () => {
-    const validations = validateUpdateUser(inputs);
+    const validations = validateUserForm(inputs);
     setErrors(validations);
 
     // // checks for validation errors
@@ -36,7 +40,12 @@ export const UserUpdate: FC<Props> = ({ handleModalClose, id, name, role }) => {
       return;
     }
 
-    const payload = { id, name: inputs.name, role: inputs.role };
+    const payload = {
+      id,
+      name: inputs.name,
+      surname: inputs.surname,
+      role: inputs.role
+    };
 
     updateUser({
       variables: {
@@ -65,9 +74,20 @@ export const UserUpdate: FC<Props> = ({ handleModalClose, id, name, role }) => {
       />
 
       <TextField
+        {...(errors.surname && { helperText: errors.surname })}
+        error={Boolean(errors.surname)}
+        label="Surname"
+        name="surname"
+        onChange={handleInputChange}
+        size="small"
+        sx={modalInputStyle}
+        value={inputs.surname}
+      />
+
+      <TextField
         {...(errors.role && { helperText: errors.role })}
         error={Boolean(errors.role)}
-        label="Job title"
+        label="Role"
         name="role"
         onChange={handleInputChange}
         size="small"

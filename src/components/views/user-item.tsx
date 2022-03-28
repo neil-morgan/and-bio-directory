@@ -5,10 +5,12 @@ import type { FC } from "react";
 import { Link } from "react-router-dom";
 import type { UserProps } from "types";
 
-export const User: FC<UserProps> = ({ name, role, id }) => (
+export const UserItem: FC<UserProps> = ({ name, surname, role, id }) => (
   <Wrapper to={`/${id}`}>
     <Box>
-      <Typography variant="h6">{name}</Typography>
+      <Typography variant="h6">
+        {name} {surname}
+      </Typography>
       <Typography variant="subtitle2">{role}</Typography>{" "}
     </Box>
     <ArrowForwardIcon fontSize="small" />

@@ -5,7 +5,8 @@ export type ReactChildrenProps = {
 };
 
 export type UserProps = {
-  id?: number;
+  id?: string;
   name: string;
+  surname: string;
   role: string;
 };
