@@ -21,6 +21,8 @@ type SearchProps = {
   length: number;
 };
 
+// ! Seniority needs a required check
+
 export const Search: FC = () => {
   const { data, loading } = useQuery(GET_USERS);
   const [searchResults, setSearchResults] = useState<SearchProps>([]);
@@ -41,7 +43,8 @@ export const Search: FC = () => {
     }
 
     const searchIndex = new Fuse(data.users, {
-      includeScore: true, // https://fusejs.io/api/options.html#includescore
+      includeScore: true, // https://fusejs.io/api/options.html#includescore,
+      threshold: 0.3, // https://fusejs.io/api/options.html#threshold
       keys: searchKeys
     });
 
@@ -94,7 +97,7 @@ export const Search: FC = () => {
 
       {searchResults.length > 0 &&
         Array.isArray(searchResults) &&
-        searchResults.map(({ item }) => {
+        searchResults.slice(0, 4).map(({ item }) => {
           const { id, name, surname, role } = item;
           return (
             <UserItem

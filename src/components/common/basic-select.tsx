@@ -39,7 +39,7 @@ export const BasicSelect: FC<BasicSelectProps> = ({
         onChange={handleChange}
       >
         {fields.map(item => (
-          <MenuItem key={uuid()} value={item.toLowerCase()}>
+          <MenuItem key={uuid()} value={item}>
             {item}
           </MenuItem>
         ))}
