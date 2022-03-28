@@ -34,9 +34,9 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
     }
 
     const payload = {
-      name: inputs.name,
-      surname: inputs.surname,
-      role: inputs.role
+      name: inputs.name.trim(),
+      surname: inputs.surname.trim(),
+      role: inputs.role.trim()
     };
 
     createUser({

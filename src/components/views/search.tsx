@@ -1,57 +1,88 @@
 import { useQuery } from "@apollo/client";
-import { Button, Typography, TextField } from "@mui/material";
+import { Button, Typography, TextField, CircularProgress } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { GET_USERS } from "api";
 import { BasicSelect, MultiSelect } from "components/common";
-// import Fuse from "fuse.js";
+import Fuse from "fuse.js";
 import { useEffect, useState } from "react";
 import type { FC } from "react";
 import type { UserProps } from "types";
-import { v4 as uuid } from "uuid";
+import {
+  searchKeys,
+  searchTraitsOptions,
+  searchSkillsOptions,
+  searchSeniorityOptions
+} from "utils";
+
+type SearchProps = {
+  [key: number]: { item: UserProps };
+};
 
 export const Search: FC = () => {
-  const { data } = useQuery(GET_USERS);
-  const [searchResults, setSearchResults] = useState([]);
+  const { data, loading } = useQuery(GET_USERS);
+  const [searchResults, setSearchResults] = useState<SearchProps>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [seniority, setSeniority] = useState<string>("");
   const [traits, setTraits] = useState<string[]>([]);
-  const [toolkit, setToolkit] = useState<string[]>([]);
+  const [skills, setSkills] = useState<string[]>([]);
 
-  // run a live search result feed here?
-  // or click search and navigate to a new page?
+  const handleInputChange = (event: {
+    target: HTMLInputElement | HTMLTextAreaElement;
+  }) => {
+    setSearchQuery(event.target.value);
+  };
 
   useEffect(() => {
-    if (data) {
-      setSearchResults(data.users);
+    if (!data) {
+      return;
     }
-  }, [data]);
 
-  return (
+    const searchIndex = new Fuse(data.users, {
+      includeScore: true, // https://fusejs.io/api/options.html#includescore
+      keys: searchKeys
+    });
+
+    const searchMap = [
+      searchQuery,
+      seniority,
+      traits.join(" "),
+      skills.join(" ")
+    ].join(" ");
+
+    setSearchResults(searchIndex.search(searchMap));
+  }, [data, searchQuery, traits, seniority, skills]);
+
+  console.log(searchResults);
+
+  return loading ? (
+    <CircularProgress />
+  ) : (
     <SearchWrapper>
       <Typography variant="h4" sx={headingStyles}>
         Explore our ANDi's
       </Typography>
       <TextField
-        label="Search term"
-        name="searchTerm"
+        label="Query"
+        onChange={handleInputChange}
         size="medium"
         sx={inputStyles}
       />
       <MultiSelect
-        fields={["React", "Javascript", "Typescript", "GraphQL"]}
+        fields={searchSkillsOptions}
         label="Skills"
-        setState={setToolkit}
-        state={toolkit}
+        setState={setSkills}
+        state={skills}
         sx={inputStyles}
       />
       <MultiSelect
-        fields={["Approachable", "Progressive", "Ambitious", "Thoughtful"]}
+        fields={searchTraitsOptions}
         label="Traits"
         setState={setTraits}
         state={traits}
         sx={inputStyles}
       />
       <BasicSelect
-        fields={["Associate", "Middle", "Senior", "Principle"]}
+        fields={searchSeniorityOptions}
         label="Seniority"
         state={seniority}
         setState={setSeniority}
@@ -61,14 +92,6 @@ export const Search: FC = () => {
       <Button variant="contained" size="large" sx={buttonStyles}>
         ANDi Search
       </Button>
-
-      {searchResults && (
-        <div>
-          {searchResults.map((user: UserProps) => (
-            <div key={uuid()}>{user.name}</div>
-          ))}
-        </div>
-      )}
     </SearchWrapper>
   );
 };

@@ -42,9 +42,9 @@ export const UserUpdate: FC<UserUpdateProps> = ({
 
     const payload = {
       id,
-      name: inputs.name,
-      surname: inputs.surname,
-      role: inputs.role
+      name: inputs.name.trim(),
+      surname: inputs.surname.trim(),
+      role: inputs.role.trim()
     };
 
     updateUser({
