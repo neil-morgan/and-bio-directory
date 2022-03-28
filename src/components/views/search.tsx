@@ -50,7 +50,9 @@ export const Search: FC = () => {
       seniority,
       traits.join(" "),
       skills.join(" ")
-    ].join(" ");
+    ]
+      .join(" ")
+      .trim();
 
     setSearchResults(searchIndex.search(searchMap));
   }, [data, searchQuery, traits, seniority, skills]);

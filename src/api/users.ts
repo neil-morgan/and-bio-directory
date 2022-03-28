@@ -38,6 +38,7 @@ export const GET_USERS = gql`
       surname
       role
       traits
+      skills
     }
   }
 `;
@@ -50,6 +51,7 @@ export const GET_USER = gql`
       surname
       role
       traits
+      skills
     }
   }
 `;
