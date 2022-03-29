@@ -5,7 +5,7 @@ import { CREATE_USER } from "api";
 import { MultiSelect } from "components/common";
 import type { FC } from "react";
 import { useState } from "react";
-import { defaultNewUser, refetchUsers, validateUserForm, searchSkillsOptions } from "utils";
+import { defaultNewUser, refetchUsers, validateUserForm, searchSkillsOptions, searchTraitsOptions } from "utils";
 
 type UserCreateProps = {
   handleModalClose: () => void;
@@ -14,6 +14,7 @@ type UserCreateProps = {
 export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
   const [inputs, setInputs] = useState(defaultNewUser);
   const [skills, setSkills] = useState<string[]>([]);
+  const [traits, setTraits] = useState<string[]>([]);
   const [errors, setErrors] = useState(defaultNewUser);
 
   const [createUser] = useMutation(CREATE_USER, refetchUsers());
@@ -30,12 +31,12 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
     const validations = validateUserForm(inputs, true);
     setErrors(validations);
     // // checks for validation errors
-    for (const [value] of Object.entries(validations)) {
+    for (const [key, value] of Object.entries(validations)) {
       if (value !== "") {
         if (Array.isArray(value)) {
-          if (value[0].length > 0) { return }
+          if (value[0].length > 0) { console.log(key, value); return }
         }
-        else { return }
+        else { console.log(key, validations); return }
       }
     }
 
@@ -45,6 +46,7 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
       role: inputs.role.trim(),
       seniority: inputs.seniority.trim(),
       skills: skills,
+      traits: traits,
     };
     createUser({
       variables: {
@@ -110,6 +112,13 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
         label="Skills"
         setState={setSkills}
         state={skills}
+        sx={modalInputStyle} />
+
+      <MultiSelect
+        fields={searchTraitsOptions}
+        label="Traits"
+        setState={setTraits}
+        state={traits}
         sx={modalInputStyle} />
 
       <Button

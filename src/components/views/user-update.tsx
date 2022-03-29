@@ -7,7 +7,7 @@ import { UPDATE_USER } from "api";
 import type { FC } from "react";
 import { useState } from "react";
 import type { UserProps } from "types";
-import { defaultNewUser, refetchUsers, searchSkillsOptions, validateUserForm } from "utils";
+import { defaultNewUser, refetchUsers, searchSkillsOptions, searchTraitsOptions, validateUserForm } from "utils";
 
 type UserUpdateProps = {
   handleModalClose: () => void;
@@ -20,10 +20,12 @@ export const UserUpdate: FC<UserUpdateProps> = ({
   surname,
   role,
   seniority,
-  skills
+  skills,
+  traits
 }) => {
-  const [inputs, setInputs] = useState({ name, surname, role, seniority, skills });
+  const [inputs, setInputs] = useState({ name, surname, role, seniority, skills, traits });
   const [tempSkills, setTempSkills] = useState(skills);
+  const [tempTraits, setTempTraits] = useState(traits);
   const [errors, setErrors] = useState(defaultNewUser);
 
   const [updateUser] = useMutation(UPDATE_USER, refetchUsers());
@@ -57,7 +59,8 @@ export const UserUpdate: FC<UserUpdateProps> = ({
       surname: inputs.surname.trim(),
       role: inputs.role.trim(),
       seniority: inputs.seniority.trim(),
-      skills: tempSkills
+      skills: tempSkills,
+      traits: tempTraits,
 
     };
 
@@ -125,6 +128,13 @@ export const UserUpdate: FC<UserUpdateProps> = ({
         label="Skills"
         setState={setTempSkills}
         state={tempSkills}
+        sx={modalInputStyle} />
+
+      <MultiSelect
+        fields={searchTraitsOptions}
+        label="Traits"
+        setState={setTempTraits}
+        state={tempTraits}
         sx={modalInputStyle} />
 
       <Button

@@ -9,6 +9,7 @@ export const CREATE_USER = gql`
       role
       skills
       seniority
+      traits
     }
   }
 `;
@@ -21,6 +22,7 @@ export const UPDATE_USER = gql`
       role
       seniority
       skills
+      traits
     }
   }
 `;
@@ -53,6 +55,7 @@ export const GET_USER = gql`
       role
       seniority
       skills
+      traits
     }
   }
 `;

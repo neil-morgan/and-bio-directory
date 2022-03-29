@@ -11,4 +11,5 @@ export type UserProps = {
   role: string;
   seniority: string;
   skills: Array<string>;
+  traits: Array<string>;
 };
