@@ -63,6 +63,7 @@ export const UserPage: FC = () => {
         surname={data.user.surname}
         role={data.user.role}
         seniority={data.user.seniority}
+        skills={data.user.skills}
       />
       <Button
         variant="contained"
@@ -128,6 +129,7 @@ export const UserPage: FC = () => {
               surname={data.user.surname}
               role={data.user.role}
               seniority={data.user.seniority}
+              skills={data.user.skills}
             />
           </Box>
         </Modal>
