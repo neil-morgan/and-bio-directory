@@ -1,7 +1,8 @@
 export const defaultNewUser = {
   name: "",
   surname: "",
-  role: ""
+  role: "",
+  seniority: "",
 };
 
 export const searchKeys = ["name", "surname", "role", "traits"];

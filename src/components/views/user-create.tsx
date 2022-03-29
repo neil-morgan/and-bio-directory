@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { Button, Typography, TextField } from "@mui/material";
+import { Button, Typography, TextField, Select, MenuItem, OutlinedInput, Chip } from "@mui/material";
 import { CREATE_USER } from "api";
 import type { FC } from "react";
 import { useState } from "react";
@@ -36,7 +36,8 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
     const payload = {
       name: inputs.name.trim(),
       surname: inputs.surname.trim(),
-      role: inputs.role.trim()
+      role: inputs.role.trim(),
+      seniority: inputs.seniority.trim(),
     };
 
     createUser({
@@ -87,6 +88,16 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
         value={inputs.role}
       />
 
+      <TextField
+        {...(errors.seniority && { helperText: errors.seniority })}
+        error={Boolean(errors.seniority)}
+        label="Seniority"
+        name="seniority"
+        onChange={handleInputChange}
+        size="small"
+        sx={modalInputStyle}
+        value={inputs.seniority}
+      />
       <Button
         type="button"
         variant="contained"

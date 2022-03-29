@@ -9,4 +9,5 @@ export type UserProps = {
   name: string;
   surname: string;
   role: string;
+  seniority: string;
 };

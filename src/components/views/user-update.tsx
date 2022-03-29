@@ -15,9 +15,10 @@ export const UserUpdate: FC<UserUpdateProps> = ({
   id,
   name,
   surname,
-  role
+  role,
+  seniority
 }) => {
-  const [inputs, setInputs] = useState({ name, surname, role });
+  const [inputs, setInputs] = useState({ name, surname, role, seniority });
   const [errors, setErrors] = useState(defaultNewUser);
 
   const [updateUser] = useMutation(UPDATE_USER, refetchUsers());
@@ -44,7 +45,8 @@ export const UserUpdate: FC<UserUpdateProps> = ({
       id,
       name: inputs.name.trim(),
       surname: inputs.surname.trim(),
-      role: inputs.role.trim()
+      role: inputs.role.trim(),
+      seniority: inputs.seniority.trim(),
     };
 
     updateUser({
@@ -93,6 +95,17 @@ export const UserUpdate: FC<UserUpdateProps> = ({
         size="small"
         sx={modalInputStyle}
         value={inputs.role}
+      />
+
+      <TextField
+        {...(errors.seniority && { helperText: errors.seniority })}
+        error={Boolean(errors.seniority)}
+        label="Seniority"
+        name="seniority"
+        onChange={handleInputChange}
+        size="small"
+        sx={modalInputStyle}
+        value={inputs.seniority}
       />
 
       <Button
