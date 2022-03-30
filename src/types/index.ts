@@ -14,6 +14,6 @@ export type UserProps = {
   surname: string;
   role: string;
   seniority: string;
-  skills: string[];
-  traits: string[];
+  skills: string[] | never[];
+  traits: string[] | never[];
 };
