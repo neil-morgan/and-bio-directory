@@ -21,7 +21,7 @@ type SearchProps = {
   length: number;
 };
 
-// ! Seniority needs a required check
+// TODO: add a reset button
 
 export const Search: FC = () => {
   const { data, loading } = useQuery(GET_USERS);
