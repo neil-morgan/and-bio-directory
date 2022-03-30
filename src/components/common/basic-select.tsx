@@ -1,5 +1,6 @@
 import {
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   OutlinedInput,
@@ -7,16 +8,18 @@ import {
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import type { FC } from "react";
-import type { SelectProps } from "types";
+import type { SelectType } from "types";
 import { v4 as uuid } from "uuid";
 
-type BasicSelectProps = {
+type BasicSelectType = {
   selected: string;
-} & SelectProps;
+} & SelectType;
 
-export const BasicSelect: FC<BasicSelectProps> = ({
+export const BasicSelect: FC<BasicSelectType> = ({
+  error,
   fields,
   handler,
+  helperText,
   label,
   name,
   selected,
@@ -28,7 +31,7 @@ export const BasicSelect: FC<BasicSelectProps> = ({
   };
 
   return (
-    <FormControl sx={sx}>
+    <FormControl sx={sx} error={error}>
       <InputLabel>{label}</InputLabel>
       <Select
         input={<OutlinedInput label={label} />}
@@ -43,6 +46,7 @@ export const BasicSelect: FC<BasicSelectProps> = ({
           </MenuItem>
         ))}
       </Select>
+      {error && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
 };

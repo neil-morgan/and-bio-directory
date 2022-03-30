@@ -5,21 +5,24 @@ import {
   InputLabel,
   MenuItem,
   OutlinedInput,
-  Select
+  Select,
+  FormHelperText
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 import type { FC } from "react";
-import type { SelectProps } from "types";
+import type { SelectType } from "types";
 import { v4 as uuid } from "uuid";
 
-type MultiSelectProps = {
+type MultiSelectType = {
   selected: string[];
-} & SelectProps;
+} & SelectType;
 
-export const MultiSelect: FC<MultiSelectProps> = ({
+export const MultiSelect: FC<MultiSelectType> = ({
+  error,
   fields,
   handler,
+  helperText,
   label,
   name,
   selected,
@@ -31,7 +34,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
   };
 
   return (
-    <FormControl sx={sx}>
+    <FormControl sx={sx} error={error}>
       <InputLabel>{label}</InputLabel>
       <Select
         name={name}
@@ -42,6 +45,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
         renderValue={selected => (
           <ChipBox>
             {selected.length > 0 &&
+              Array.isArray(selected) &&
               selected.map(value => (
                 <Chip key={value} label={value} sx={{ mr: 0.5, my: 0.5 }} />
               ))}
@@ -54,6 +58,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
           </MenuItem>
         ))}
       </Select>
+      {error && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
 };

@@ -1,8 +1,8 @@
 import { Container } from "@mui/material";
 import type { FC } from "react";
-import type { ReactChildrenProps } from "types";
+import type { ReactChildrenType } from "types";
 
-export const Main: FC<ReactChildrenProps> = ({ children }) => (
+export const Main: FC<ReactChildrenType> = ({ children }) => (
   <Container component="main" sx={mainStyle}>
     {children}
   </Container>

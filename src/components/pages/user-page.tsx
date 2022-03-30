@@ -53,7 +53,7 @@ export const UserPage: FC = () => {
     <CircularProgress />
   ) : (
     <>
-      <Link to="/">
+      <Link to="/users">
         <Typography>back</Typography>
       </Link>
 

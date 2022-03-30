@@ -1,10 +1,10 @@
 import { styled } from "@mui/material/styles";
 import type { FC } from "react";
-import type { ReactChildrenProps } from "types";
+import type { ReactChildrenType } from "types";
 
 import { Header, Footer, Main } from ".";
 
-export const Layout: FC<ReactChildrenProps> = ({ children }) => (
+export const Layout: FC<ReactChildrenType> = ({ children }) => (
   <Wrapper>
     <Header />
     <Main>{children}</Main>

@@ -4,9 +4,9 @@ import { UserCreate } from "components/views";
 import type { FC } from "react";
 import { useState } from "react";
 import { modalBoxStyle } from "theme";
-import type { ReactChildrenProps } from "types";
+import type { ReactChildrenType } from "types";
 
-export const UsersList: FC<ReactChildrenProps> = ({ children }) => {
+export const UsersList: FC<ReactChildrenType> = ({ children }) => {
   const [open, setOpen] = useState(false);
 
   const handleModalOpen = () => {

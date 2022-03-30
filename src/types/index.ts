@@ -1,7 +1,9 @@
 import type { SxProps } from "@mui/system";
 import type { ReactNode } from "react";
 
-export type ReactChildrenProps = {
+type ErrorsObject<T> = Partial<Record<keyof T, string>>;
+
+export type ReactChildrenType = {
   children?: ReactNode | ReactNode[];
 };
 
@@ -9,15 +11,17 @@ export type SelectIndexSignature = {
   [key: string]: (selected: string | string[]) => void;
 };
 
-export type SelectProps = {
+export type SelectType = {
   fields: string[];
   handler: (name: string, selected: string[] | string) => void;
   label: string;
   name: string;
+  helperText?: string;
   sx?: SxProps;
+  error?: boolean;
 };
 
-export type UserProps = {
+export type UserType = {
   id?: string;
   name: string;
   surname: string;
@@ -26,3 +30,5 @@ export type UserProps = {
   skills: string[] | never[];
   traits: string[] | never[];
 };
+
+export type UserTypeErrors = ErrorsObject<UserType>;
