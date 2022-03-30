@@ -1,8 +1,9 @@
 import { useQuery } from "@apollo/client";
-import { Button, Typography, TextField, CircularProgress } from "@mui/material";
+import { Typography, TextField, CircularProgress } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { GET_USERS } from "api";
 import { BasicSelect, MultiSelect } from "components/common";
+import { UserItem } from "components/views";
 import Fuse from "fuse.js";
 import { useEffect, useState } from "react";
 import type { FC } from "react";
@@ -13,10 +14,14 @@ import {
   searchSkillsOptions,
   searchSeniorityOptions
 } from "utils";
+import { v4 as uuid } from "uuid";
 
 type SearchProps = {
   [key: number]: { item: UserProps };
+  length: number;
 };
+
+// TODO: add a reset button
 
 export const Search: FC = () => {
   const { data, loading } = useQuery(GET_USERS);
@@ -26,22 +31,42 @@ export const Search: FC = () => {
   const [traits, setTraits] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
 
+  // ? maybe .flat() here?
+  const searchIndex = [
+    searchQuery,
+    seniority,
+    traits.join(" "),
+    skills.join(" ")
+  ]
+    .join(" ")
+    .trim();
+
+  const selectedIndex: SelectIndexSignature = {
+    traits: selected => {
+      if (Array.isArray(selected)) {
+        setTraits(selected);
+      }
+    },
+    skills: selected => {
+      if (Array.isArray(selected)) {
+        setSkills(selected);
+      }
+    },
+    seniority: selected => {
+      if (typeof selected === "string") {
+        setSeniority(selected);
+      }
+    }
+  };
+
   const handleInputChange = (event: {
     target: HTMLInputElement | HTMLTextAreaElement;
   }) => {
     setSearchQuery(event.target.value);
   };
 
-  const handleSelectChange = (name: string, selection: string[]) => {
-    const index: SelectIndexSignature = {
-      traits: () => {
-        setTraits(selection);
-      },
-      skills: () => {
-        setSkills(selection);
-      }
-    };
-    index[name]();
+  const handleSelectChange = (name: string, selected: string[] | string) => {
+    selectedIndex[name](selected);
   };
 
   useEffect(() => {
@@ -49,20 +74,13 @@ export const Search: FC = () => {
       return;
     }
 
-    const searchIndex = new Fuse(data.users, {
-      includeScore: true, // https://fusejs.io/api/options.html#includescore
+    const fuse = new Fuse(data.users, {
+      threshold: 0.5, // https://fusejs.io/api/options.html#threshold
       keys: searchKeys
     });
 
-    const searchMap = [
-      searchQuery,
-      seniority,
-      traits.join(" "),
-      skills.join(" ")
-    ].join(" ");
-
-    setSearchResults(searchIndex.search(searchMap));
-  }, [data, searchQuery, traits, seniority, skills]);
+    setSearchResults(fuse.search(searchIndex));
+  }, [data, searchIndex, searchQuery, seniority, skills, traits]);
 
   return loading ? (
     <CircularProgress />
@@ -71,12 +89,14 @@ export const Search: FC = () => {
       <Typography variant="h4" sx={headingStyles}>
         Explore our ANDi's
       </Typography>
+
       <TextField
         label="Query"
         onChange={handleInputChange}
         size="medium"
         sx={inputStyles}
       />
+
       <MultiSelect
         name="skills"
         fields={searchSkillsOptions}
@@ -85,6 +105,7 @@ export const Search: FC = () => {
         selected={skills}
         sx={inputStyles}
       />
+
       <MultiSelect
         name="traits"
         fields={searchTraitsOptions}
@@ -93,17 +114,25 @@ export const Search: FC = () => {
         selected={traits}
         sx={inputStyles}
       />
+
       <BasicSelect
+        name="seniority"
         fields={searchSeniorityOptions}
         label="Seniority"
-        state={seniority}
-        setState={setSeniority}
+        selected={seniority}
+        handler={handleSelectChange}
         sx={{ ...inputStyles, minWidth: 120 }}
       />
 
-      <Button variant="contained" size="large" sx={buttonStyles}>
-        ANDi Search
-      </Button>
+      {searchIndex.length > 0 && searchResults.length === 0 && (
+        <Typography>Sorry, no results found</Typography>
+      )}
+
+      {searchResults.length > 0 &&
+        Array.isArray(searchResults) &&
+        searchResults
+          .slice(0, 4)
+          .map(props => <UserItem key={uuid()} {...props.item} />)}
     </SearchWrapper>
   );
 };
@@ -124,12 +153,6 @@ const headingStyles = {
   width: "100%",
   textAlign: "center",
   py: 1
-};
-
-const buttonStyles = {
-  marginLeft: "auto",
-  marginRight: "auto",
-  my: 1
 };
 
 const inputStyles = {

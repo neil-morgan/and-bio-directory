@@ -9,18 +9,25 @@ export const defaultNewUser: UserProps = {
   traits: []
 };
 
-export const searchKeys = ["name", "surname", "role", "traits"];
+export const searchKeys = [
+  "name",
+  "role",
+  "seniority",
+  "skills",
+  "surname",
+  "traits"
+];
 
 export const searchTraitsOptions = [
-  "Approachable",
-  "Progressive",
   "Ambitious",
-  "Thoughtful",
-  "Friendly"
+  "Approachable",
+  "Friendly",
+  "Progressive",
+  "Thoughtful"
 ];
 
 export const searchSkillsOptions = [
-  "React",
+  "GraphQL",
   "Javascript",
   "Typescript",
   "GraphQL",
@@ -34,6 +41,6 @@ export const searchSkillsOptions = [
 export const searchSeniorityOptions = [
   "Associate",
   "Middle",
-  "Senior",
-  "Principle"
+  "Principle",
+  "Senior"
 ];

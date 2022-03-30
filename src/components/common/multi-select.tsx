@@ -9,18 +9,13 @@ import {
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
-import type { SxProps } from "@mui/system";
 import type { FC } from "react";
+import type { SelectProps } from "types";
 import { v4 as uuid } from "uuid";
 
 type MultiSelectProps = {
-  fields: string[];
-  handler: (name: string, selection: string[]) => void;
-  label: string;
-  name: string;
   selected: string[];
-  sx?: SxProps;
-};
+} & SelectProps;
 
 export const MultiSelect: FC<MultiSelectProps> = ({
   fields,
@@ -30,11 +25,8 @@ export const MultiSelect: FC<MultiSelectProps> = ({
   selected,
   sx
 }) => {
-  const handleChange = (event: SelectChangeEvent<typeof selected>) => {
-    const {
-      target: { value }
-    } = event;
-
+  const handleChange = ({ target }: SelectChangeEvent<typeof selected>) => {
+    const { value } = target;
     handler(name, typeof value === "string" ? value.split(",") : value);
   };
 

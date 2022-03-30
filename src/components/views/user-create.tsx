@@ -2,15 +2,16 @@
 import { useMutation } from "@apollo/client";
 import { Button, Typography, TextField } from "@mui/material";
 import { CREATE_USER } from "api";
-import { MultiSelect } from "components/common";
+import { BasicSelect, MultiSelect } from "components/common";
 import type { FC } from "react";
 import { useState } from "react";
 import {
   defaultNewUser,
   refetchUsers,
-  validateUserForm,
+  searchSeniorityOptions,
   searchSkillsOptions,
-  searchTraitsOptions
+  searchTraitsOptions,
+  validateUserForm
 } from "utils";
 
 type UserCreateProps = {
@@ -31,10 +32,10 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
     }));
   };
 
-  const handleSelectChange = (name: string, selection: string[]) => {
+  const handleSelectChange = (name: string, selected: string[] | string) => {
     setInputs(inputs => ({
       ...inputs,
-      [name]: selection
+      [name]: selected
     }));
   };
 
@@ -112,15 +113,13 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
         value={inputs.role}
       />
 
-      <TextField
-        {...(errors.seniority && { helperText: errors.seniority })}
-        error={Boolean(errors.seniority)}
-        label="Seniority"
+      <BasicSelect
         name="seniority"
-        onChange={handleInputChange}
-        size="small"
+        fields={searchSeniorityOptions}
+        label="Seniority"
+        selected={inputs.seniority}
+        handler={handleSelectChange}
         sx={modalInputStyle}
-        value={inputs.seniority}
       />
 
       <MultiSelect

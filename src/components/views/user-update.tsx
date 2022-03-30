@@ -3,13 +3,14 @@
 import { useMutation } from "@apollo/client";
 import { Button, Typography, TextField } from "@mui/material";
 import { UPDATE_USER } from "api";
-import { MultiSelect } from "components/common";
+import { BasicSelect, MultiSelect } from "components/common";
 import type { FC } from "react";
 import { useState } from "react";
 import type { UserProps } from "types";
 import {
   defaultNewUser,
   refetchUsers,
+  searchSeniorityOptions,
   searchSkillsOptions,
   searchTraitsOptions,
   validateUserForm
@@ -38,7 +39,6 @@ export const UserUpdate: FC<UserUpdateProps> = ({
     traits
   });
   const [errors, setErrors] = useState(defaultNewUser);
-
   const [updateUser] = useMutation(UPDATE_USER, refetchUsers());
 
   const handleInputChange = (event: {
@@ -50,10 +50,10 @@ export const UserUpdate: FC<UserUpdateProps> = ({
     }));
   };
 
-  const handleSelectChange = (name: string, selection: string[]) => {
+  const handleSelectChange = (name: string, selected: string[] | string) => {
     setInputs(inputs => ({
       ...inputs,
-      [name]: selection
+      [name]: selected
     }));
   };
 
@@ -134,15 +134,13 @@ export const UserUpdate: FC<UserUpdateProps> = ({
         value={inputs.role}
       />
 
-      <TextField
-        {...(errors.seniority && { helperText: errors.seniority })}
-        error={Boolean(errors.seniority)}
-        label="Seniority"
+      <BasicSelect
         name="seniority"
-        onChange={handleInputChange}
-        size="small"
+        fields={searchSeniorityOptions}
+        label="Seniority"
+        selected={inputs.seniority}
+        handler={handleSelectChange}
         sx={modalInputStyle}
-        value={inputs.seniority}
       />
 
       <MultiSelect
