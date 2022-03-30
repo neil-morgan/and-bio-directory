@@ -74,8 +74,8 @@ export const UserUpdate: FC<UserUpdateProps> = ({
           id,
           name: inputs.name.trim(),
           surname: inputs.surname.trim(),
-          role: inputs.role.trim(),
-          seniority: inputs.seniority.trim(),
+          role: inputs.role,
+          seniority: inputs.seniority,
           skills: inputs.skills,
           traits: inputs.traits
         }
