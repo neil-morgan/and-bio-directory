@@ -6,27 +6,28 @@ import {
   Select
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material/Select";
-import type { SxProps } from "@mui/system";
 import type { FC } from "react";
+import type { SelectProps } from "types";
 import { v4 as uuid } from "uuid";
 
 type BasicSelectProps = {
-  fields: string[];
-  label: string;
-  setState: (selection: string) => void;
-  state: string;
-  sx?: SxProps;
-};
+  selected: string;
+} & SelectProps;
 
 export const BasicSelect: FC<BasicSelectProps> = ({
   fields,
+  handler,
   label,
-  setState,
-  state,
+  name,
+  selected,
   sx
 }) => {
   const handleChange = (event: SelectChangeEvent) => {
-    setState(event.target.value);
+    const {
+      target: { value }
+    } = event;
+
+    handler(name, value);
   };
 
   return (
@@ -34,9 +35,10 @@ export const BasicSelect: FC<BasicSelectProps> = ({
       <InputLabel>{label}</InputLabel>
       <Select
         input={<OutlinedInput label={label} />}
-        value={state}
         label={label}
+        name={name}
         onChange={handleChange}
+        value={selected}
       >
         {fields.map(item => (
           <MenuItem key={uuid()} value={item}>

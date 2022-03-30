@@ -6,7 +6,10 @@ export const CREATE_USER = gql`
       id
       name
       role
+      seniority
+      skills
       surname
+      traits
     }
   }
 `;
@@ -14,10 +17,12 @@ export const CREATE_USER = gql`
 export const UPDATE_USER = gql`
   mutation ($input: updateUserData!) {
     updateUser(input: $input) {
-      id
       name
       role
+      seniority
+      skills
       surname
+      traits
     }
   }
 `;

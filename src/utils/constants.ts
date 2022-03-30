@@ -1,7 +1,12 @@
-export const defaultNewUser = {
+import type { UserProps } from "types";
+
+export const defaultNewUser: UserProps = {
   name: "",
   surname: "",
-  role: ""
+  role: "",
+  seniority: "",
+  skills: [],
+  traits: []
 };
 
 export const searchKeys = [
@@ -24,8 +29,13 @@ export const searchTraitsOptions = [
 export const searchSkillsOptions = [
   "GraphQL",
   "Javascript",
-  "React",
-  "Typescript"
+  "Typescript",
+  "GraphQL",
+  "Scrum",
+  "Agile",
+  "UI/UX",
+  "Figma",
+  "Jira"
 ];
 
 export const searchSeniorityOptions = [

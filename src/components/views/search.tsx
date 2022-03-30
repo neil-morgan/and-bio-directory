@@ -7,7 +7,7 @@ import { UserItem } from "components/views";
 import Fuse from "fuse.js";
 import { useEffect, useState } from "react";
 import type { FC } from "react";
-import type { UserProps } from "types";
+import type { UserProps, SelectIndexSignature } from "types";
 import {
   searchKeys,
   searchTraitsOptions,
@@ -32,9 +32,32 @@ export const Search: FC = () => {
   const [skills, setSkills] = useState<string[]>([]);
 
   // ? maybe .flat() here?
-  const searchMap = [searchQuery, seniority, traits.join(" "), skills.join(" ")]
+  const searchIndex = [
+    searchQuery,
+    seniority,
+    traits.join(" "),
+    skills.join(" ")
+  ]
     .join(" ")
     .trim();
+
+  const selectedIndex: SelectIndexSignature = {
+    traits: selected => {
+      if (Array.isArray(selected)) {
+        setTraits(selected);
+      }
+    },
+    skills: selected => {
+      if (Array.isArray(selected)) {
+        setSkills(selected);
+      }
+    },
+    seniority: selected => {
+      if (typeof selected === "string") {
+        setSeniority(selected);
+      }
+    }
+  };
 
   const handleInputChange = (event: {
     target: HTMLInputElement | HTMLTextAreaElement;
@@ -42,19 +65,22 @@ export const Search: FC = () => {
     setSearchQuery(event.target.value);
   };
 
+  const handleSelectChange = (name: string, selected: string[] | string) => {
+    selectedIndex[name](selected);
+  };
+
   useEffect(() => {
     if (!data) {
       return;
     }
 
-    const searchIndex = new Fuse(data.users, {
-      includeScore: true, // https://fusejs.io/api/options.html#includescore,
-      threshold: 0.3, // https://fusejs.io/api/options.html#threshold
+    const fuse = new Fuse(data.users, {
+      threshold: 0.5, // https://fusejs.io/api/options.html#threshold
       keys: searchKeys
     });
 
-    setSearchResults(searchIndex.search(searchMap));
-  }, [data, searchMap]);
+    setSearchResults(fuse.search(searchIndex));
+  }, [data, searchIndex, searchQuery, seniority, skills, traits]);
 
   return loading ? (
     <CircularProgress />
@@ -63,52 +89,50 @@ export const Search: FC = () => {
       <Typography variant="h4" sx={headingStyles}>
         Explore our ANDi's
       </Typography>
+
       <TextField
         label="Query"
         onChange={handleInputChange}
         size="medium"
         sx={inputStyles}
       />
+
       <MultiSelect
+        name="skills"
         fields={searchSkillsOptions}
         label="Skills"
-        setState={setSkills}
-        state={skills}
+        handler={handleSelectChange}
+        selected={skills}
         sx={inputStyles}
       />
+
       <MultiSelect
+        name="traits"
         fields={searchTraitsOptions}
         label="Traits"
-        setState={setTraits}
-        state={traits}
+        handler={handleSelectChange}
+        selected={traits}
         sx={inputStyles}
       />
+
       <BasicSelect
+        name="seniority"
         fields={searchSeniorityOptions}
         label="Seniority"
-        state={seniority}
-        setState={setSeniority}
+        selected={seniority}
+        handler={handleSelectChange}
         sx={{ ...inputStyles, minWidth: 120 }}
       />
 
-      {searchMap.length > 0 && searchResults.length === 0 && (
+      {searchIndex.length > 0 && searchResults.length === 0 && (
         <Typography>Sorry, no results found</Typography>
       )}
 
       {searchResults.length > 0 &&
         Array.isArray(searchResults) &&
-        searchResults.slice(0, 4).map(({ item }) => {
-          const { id, name, surname, role } = item;
-          return (
-            <UserItem
-              key={uuid()}
-              name={name}
-              surname={surname}
-              role={role}
-              id={id}
-            />
-          );
-        })}
+        searchResults
+          .slice(0, 4)
+          .map(props => <UserItem key={uuid()} {...props.item} />)}
     </SearchWrapper>
   );
 };
