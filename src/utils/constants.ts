@@ -1,7 +1,10 @@
 export const defaultNewUser = {
   name: "",
   surname: "",
-  role: ""
+  role: "",
+  seniority: "",
+  skills: [""],
+  traits: [""]
 };
 
 export const searchKeys = ["name", "surname", "role", "traits"];
@@ -18,7 +21,12 @@ export const searchSkillsOptions = [
   "React",
   "Javascript",
   "Typescript",
-  "GraphQL"
+  "GraphQL",
+  "Scrum",
+  "Agile",
+  "UI/UX",
+  "Figma",
+  "Jira"
 ];
 
 export const searchSeniorityOptions = [

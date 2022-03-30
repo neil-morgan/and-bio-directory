@@ -28,6 +28,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
   state,
   sx
 }) => {
+  setState(state);
   const handleChange = (event: SelectChangeEvent<typeof state>) => {
     const {
       target: { value }

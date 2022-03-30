@@ -1,10 +1,13 @@
+/* eslint object-shorthand: 0 */
+
 import { useMutation } from "@apollo/client";
 import { Button, Typography, TextField } from "@mui/material";
+import { MultiSelect } from 'components/common'
 import { UPDATE_USER } from "api";
 import type { FC } from "react";
 import { useState } from "react";
 import type { UserProps } from "types";
-import { defaultNewUser, refetchUsers, validateUserForm } from "utils";
+import { defaultNewUser, refetchUsers, searchSkillsOptions, searchTraitsOptions, validateUserForm } from "utils";
 
 type UserUpdateProps = {
   handleModalClose: () => void;
@@ -15,9 +18,14 @@ export const UserUpdate: FC<UserUpdateProps> = ({
   id,
   name,
   surname,
-  role
+  role,
+  seniority,
+  skills,
+  traits
 }) => {
-  const [inputs, setInputs] = useState({ name, surname, role });
+  const [inputs, setInputs] = useState({ name, surname, role, seniority, skills, traits });
+  const [tempSkills, setTempSkills] = useState(skills);
+  const [tempTraits, setTempTraits] = useState(traits);
   const [errors, setErrors] = useState(defaultNewUser);
 
   const [updateUser] = useMutation(UPDATE_USER, refetchUsers());
@@ -36,15 +44,24 @@ export const UserUpdate: FC<UserUpdateProps> = ({
     setErrors(validations);
 
     // // checks for validation errors
-    if (Object.values(validations).some(i => i !== "")) {
-      return;
+    for (const [key, value] of Object.entries(validations)) {
+      if (value !== "") {
+        if (Array.isArray(value)) {
+          if (value[0].length > 0) { console.log(key, value); return }
+        }
+        else { console.log(key, value); return }
+      }
     }
 
     const payload = {
       id,
       name: inputs.name.trim(),
       surname: inputs.surname.trim(),
-      role: inputs.role.trim()
+      role: inputs.role.trim(),
+      seniority: inputs.seniority.trim(),
+      skills: tempSkills,
+      traits: tempTraits,
+
     };
 
     updateUser({
@@ -94,6 +111,31 @@ export const UserUpdate: FC<UserUpdateProps> = ({
         sx={modalInputStyle}
         value={inputs.role}
       />
+
+      <TextField
+        {...(errors.seniority && { helperText: errors.seniority })}
+        error={Boolean(errors.seniority)}
+        label="Seniority"
+        name="seniority"
+        onChange={handleInputChange}
+        size="small"
+        sx={modalInputStyle}
+        value={inputs.seniority}
+      />
+
+      <MultiSelect
+        fields={searchSkillsOptions}
+        label="Skills"
+        setState={setTempSkills}
+        state={tempSkills}
+        sx={modalInputStyle} />
+
+      <MultiSelect
+        fields={searchTraitsOptions}
+        label="Traits"
+        setState={setTempTraits}
+        state={tempTraits}
+        sx={modalInputStyle} />
 
       <Button
         type="button"
