@@ -15,40 +15,44 @@ import { v4 as uuid } from "uuid";
 
 type MultiSelectProps = {
   fields: string[];
+  handler: (name: string, selection: string[]) => void;
   label: string;
-  setState: (selection: string[]) => void;
-  state: string[];
+  name: string;
+  selected: string[];
   sx?: SxProps;
 };
 
 export const MultiSelect: FC<MultiSelectProps> = ({
   fields,
+  handler,
   label,
-  setState,
-  state,
+  name,
+  selected,
   sx
 }) => {
-  setState(state);
-  const handleChange = (event: SelectChangeEvent<typeof state>) => {
+  const handleChange = (event: SelectChangeEvent<typeof selected>) => {
     const {
       target: { value }
     } = event;
-    setState(typeof value === "string" ? value.split(",") : value);
+
+    handler(name, typeof value === "string" ? value.split(",") : value);
   };
 
   return (
     <FormControl sx={sx}>
       <InputLabel>{label}</InputLabel>
       <Select
+        name={name}
         multiple
-        value={state}
+        value={selected}
         onChange={handleChange}
         input={<OutlinedInput label={label} />}
         renderValue={selected => (
           <ChipBox>
-            {selected.map(value => (
-              <Chip key={value} label={value} sx={{ mr: 0.5, my: 0.5 }} />
-            ))}
+            {selected.length > 0 &&
+              selected.map(value => (
+                <Chip key={value} label={value} sx={{ mr: 0.5, my: 0.5 }} />
+              ))}
           </ChipBox>
         )}
       >

@@ -2,12 +2,18 @@
 
 import { useMutation } from "@apollo/client";
 import { Button, Typography, TextField } from "@mui/material";
-import { MultiSelect } from 'components/common'
 import { UPDATE_USER } from "api";
+import { MultiSelect } from "components/common";
 import type { FC } from "react";
 import { useState } from "react";
 import type { UserProps } from "types";
-import { defaultNewUser, refetchUsers, searchSkillsOptions, searchTraitsOptions, validateUserForm } from "utils";
+import {
+  defaultNewUser,
+  refetchUsers,
+  searchSkillsOptions,
+  searchTraitsOptions,
+  validateUserForm
+} from "utils";
 
 type UserUpdateProps = {
   handleModalClose: () => void;
@@ -23,9 +29,14 @@ export const UserUpdate: FC<UserUpdateProps> = ({
   skills,
   traits
 }) => {
-  const [inputs, setInputs] = useState({ name, surname, role, seniority, skills, traits });
-  const [tempSkills, setTempSkills] = useState(skills);
-  const [tempTraits, setTempTraits] = useState(traits);
+  const [inputs, setInputs] = useState({
+    name,
+    surname,
+    role,
+    seniority,
+    skills,
+    traits
+  });
   const [errors, setErrors] = useState(defaultNewUser);
 
   const [updateUser] = useMutation(UPDATE_USER, refetchUsers());
@@ -39,6 +50,13 @@ export const UserUpdate: FC<UserUpdateProps> = ({
     }));
   };
 
+  const handleSelectChange = (name: string, selection: string[]) => {
+    setInputs(inputs => ({
+      ...inputs,
+      [name]: selection
+    }));
+  };
+
   const handleSubmit = () => {
     const validations = validateUserForm(inputs);
     setErrors(validations);
@@ -47,9 +65,14 @@ export const UserUpdate: FC<UserUpdateProps> = ({
     for (const [key, value] of Object.entries(validations)) {
       if (value !== "") {
         if (Array.isArray(value)) {
-          if (value[0].length > 0) { console.log(key, value); return }
+          if (value[0].length > 0) {
+            console.log(key, value);
+            return;
+          }
+        } else {
+          console.log(key, value);
+          return;
         }
-        else { console.log(key, value); return }
       }
     }
 
@@ -59,9 +82,8 @@ export const UserUpdate: FC<UserUpdateProps> = ({
       surname: inputs.surname.trim(),
       role: inputs.role.trim(),
       seniority: inputs.seniority.trim(),
-      skills: tempSkills,
-      traits: tempTraits,
-
+      skills: inputs.skills,
+      traits: inputs.traits
     };
 
     updateUser({
@@ -124,18 +146,22 @@ export const UserUpdate: FC<UserUpdateProps> = ({
       />
 
       <MultiSelect
+        name="skills"
         fields={searchSkillsOptions}
         label="Skills"
-        setState={setTempSkills}
-        state={tempSkills}
-        sx={modalInputStyle} />
+        handler={handleSelectChange}
+        selected={inputs.skills}
+        sx={modalInputStyle}
+      />
 
       <MultiSelect
+        name="traits"
         fields={searchTraitsOptions}
         label="Traits"
-        setState={setTempTraits}
-        state={tempTraits}
-        sx={modalInputStyle} />
+        handler={handleSelectChange}
+        selected={inputs.traits}
+        sx={modalInputStyle}
+      />
 
       <Button
         type="button"

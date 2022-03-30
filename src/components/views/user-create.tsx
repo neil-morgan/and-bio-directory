@@ -5,7 +5,13 @@ import { CREATE_USER } from "api";
 import { MultiSelect } from "components/common";
 import type { FC } from "react";
 import { useState } from "react";
-import { defaultNewUser, refetchUsers, validateUserForm, searchSkillsOptions, searchTraitsOptions } from "utils";
+import {
+  defaultNewUser,
+  refetchUsers,
+  validateUserForm,
+  searchSkillsOptions,
+  searchTraitsOptions
+} from "utils";
 
 type UserCreateProps = {
   handleModalClose: () => void;
@@ -13,17 +19,22 @@ type UserCreateProps = {
 
 export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
   const [inputs, setInputs] = useState(defaultNewUser);
-  const [skills, setSkills] = useState<string[]>([]);
-  const [traits, setTraits] = useState<string[]>([]);
   const [errors, setErrors] = useState(defaultNewUser);
-
   const [createUser] = useMutation(CREATE_USER, refetchUsers());
+
   const handleInputChange = (event: {
     target: HTMLInputElement | HTMLTextAreaElement;
   }) => {
     setInputs(inputs => ({
       ...inputs,
       [event.target.name]: event.target.value
+    }));
+  };
+
+  const handleSelectChange = (name: string, selection: string[]) => {
+    setInputs(inputs => ({
+      ...inputs,
+      [name]: selection
     }));
   };
 
@@ -34,9 +45,14 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
     for (const [key, value] of Object.entries(validations)) {
       if (value !== "") {
         if (Array.isArray(value)) {
-          if (value[0].length > 0) { console.log(key, value); return }
+          if (value[0].length > 0) {
+            console.log(key, value);
+            return;
+          }
+        } else {
+          console.log(key, validations);
+          return;
         }
-        else { console.log(key, validations); return }
       }
     }
 
@@ -45,8 +61,8 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
       surname: inputs.surname.trim(),
       role: inputs.role.trim(),
       seniority: inputs.seniority.trim(),
-      skills: skills,
-      traits: traits,
+      skills: inputs.skills,
+      traits: inputs.traits
     };
     createUser({
       variables: {
@@ -109,17 +125,21 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
 
       <MultiSelect
         fields={searchSkillsOptions}
+        handler={handleSelectChange}
         label="Skills"
-        setState={setSkills}
-        state={skills}
-        sx={modalInputStyle} />
+        name="skills"
+        selected={inputs.skills}
+        sx={modalInputStyle}
+      />
 
       <MultiSelect
         fields={searchTraitsOptions}
+        handler={handleSelectChange}
         label="Traits"
-        setState={setTraits}
-        state={traits}
-        sx={modalInputStyle} />
+        name="traits"
+        selected={inputs.traits}
+        sx={modalInputStyle}
+      />
 
       <Button
         type="button"

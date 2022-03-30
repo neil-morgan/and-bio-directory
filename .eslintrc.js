@@ -17,7 +17,8 @@ const reactOverride = createReactOverride({
 
 module.exports = createConfig({
   extends: "galex",
-  overrides: [reactOverride]
+  overrides: [reactOverride],
+  root: true
 
   // incrementalAdoption: true,
 });

@@ -1,10 +1,12 @@
-export const defaultNewUser = {
+import type { UserProps } from "types";
+
+export const defaultNewUser: UserProps = {
   name: "",
   surname: "",
   role: "",
   seniority: "",
-  skills: [""],
-  traits: [""]
+  skills: [],
+  traits: []
 };
 
 export const searchKeys = ["name", "surname", "role", "traits"];
