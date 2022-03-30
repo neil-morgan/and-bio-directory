@@ -15,20 +15,9 @@ export const UsersPage: FC = () => {
 
   return (
     <UsersList>
-      {data?.users.map(
-        ({ name, surname, id, role, seniority, skills, traits }: UserType) => (
-          <UserItem
-            key={uuid()}
-            name={name}
-            surname={surname}
-            role={role}
-            id={id}
-            seniority={seniority}
-            skills={skills}
-            traits={traits}
-          />
-        )
-      )}
+      {data?.users.map((props: UserType) => (
+        <UserItem key={uuid()} {...props} />
+      ))}
     </UsersList>
   );
 };
