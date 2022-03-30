@@ -25,11 +25,8 @@ export const MultiSelect: FC<MultiSelectProps> = ({
   selected,
   sx
 }) => {
-  const handleChange = (event: SelectChangeEvent<typeof selected>) => {
-    const {
-      target: { value }
-    } = event;
-
+  const handleChange = ({ target }: SelectChangeEvent<typeof selected>) => {
+    const { value } = target;
     handler(name, typeof value === "string" ? value.split(",") : value);
   };
 

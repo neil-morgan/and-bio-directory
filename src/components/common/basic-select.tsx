@@ -22,11 +22,8 @@ export const BasicSelect: FC<BasicSelectProps> = ({
   selected,
   sx
 }) => {
-  const handleChange = (event: SelectChangeEvent) => {
-    const {
-      target: { value }
-    } = event;
-
+  const handleChange = ({ target }: SelectChangeEvent) => {
+    const { value } = target;
     handler(name, value);
   };
 
