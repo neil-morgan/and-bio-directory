@@ -9,7 +9,4 @@ export type UserProps = {
   name: string;
   surname: string;
   role: string;
-  seniority: string;
-  skills: Array<string>;
-  traits: Array<string>;
 };
