@@ -6,7 +6,7 @@ import { BasicSelect, MultiSelect } from "components/common";
 import Fuse from "fuse.js";
 import { useEffect, useState } from "react";
 import type { FC } from "react";
-import type { UserProps } from "types";
+import type { UserProps, SelectIndexSignature } from "types";
 import {
   searchKeys,
   searchTraitsOptions,
@@ -32,6 +32,18 @@ export const Search: FC = () => {
     setSearchQuery(event.target.value);
   };
 
+  const handleSelectChange = (name: string, selection: string[]) => {
+    const index: SelectIndexSignature = {
+      traits: () => {
+        setTraits(selection);
+      },
+      skills: () => {
+        setSkills(selection);
+      }
+    };
+    index[name]();
+  };
+
   useEffect(() => {
     if (!data) {
       return;
@@ -52,8 +64,6 @@ export const Search: FC = () => {
     setSearchResults(searchIndex.search(searchMap));
   }, [data, searchQuery, traits, seniority, skills]);
 
-  console.log(searchResults);
-
   return loading ? (
     <CircularProgress />
   ) : (
@@ -68,17 +78,19 @@ export const Search: FC = () => {
         sx={inputStyles}
       />
       <MultiSelect
+        name="skills"
         fields={searchSkillsOptions}
         label="Skills"
-        setState={setSkills}
-        state={skills}
+        handler={handleSelectChange}
+        selected={skills}
         sx={inputStyles}
       />
       <MultiSelect
+        name="traits"
         fields={searchTraitsOptions}
         label="Traits"
-        setState={setTraits}
-        state={traits}
+        handler={handleSelectChange}
+        selected={traits}
         sx={inputStyles}
       />
       <BasicSelect

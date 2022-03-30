@@ -1,9 +1,17 @@
+/* eslint object-shorthand: 0 */
 import { useMutation } from "@apollo/client";
 import { Button, Typography, TextField } from "@mui/material";
 import { CREATE_USER } from "api";
+import { MultiSelect } from "components/common";
 import type { FC } from "react";
 import { useState } from "react";
-import { defaultNewUser, refetchUsers, validateUserForm } from "utils";
+import {
+  defaultNewUser,
+  refetchUsers,
+  validateUserForm,
+  searchSkillsOptions,
+  searchTraitsOptions
+} from "utils";
 
 type UserCreateProps = {
   handleModalClose: () => void;
@@ -12,7 +20,6 @@ type UserCreateProps = {
 export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
   const [inputs, setInputs] = useState(defaultNewUser);
   const [errors, setErrors] = useState(defaultNewUser);
-
   const [createUser] = useMutation(CREATE_USER, refetchUsers());
 
   const handleInputChange = (event: {
@@ -24,21 +31,39 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
     }));
   };
 
+  const handleSelectChange = (name: string, selection: string[]) => {
+    setInputs(inputs => ({
+      ...inputs,
+      [name]: selection
+    }));
+  };
+
   const handleSubmit = () => {
     const validations = validateUserForm(inputs, true);
     setErrors(validations);
-
     // // checks for validation errors
-    if (Object.values(validations).some(i => i !== "")) {
-      return;
+    for (const [key, value] of Object.entries(validations)) {
+      if (value !== "") {
+        if (Array.isArray(value)) {
+          if (value[0].length > 0) {
+            console.log(key, value);
+            return;
+          }
+        } else {
+          console.log(key, validations);
+          return;
+        }
+      }
     }
 
     const payload = {
       name: inputs.name.trim(),
       surname: inputs.surname.trim(),
-      role: inputs.role.trim()
+      role: inputs.role.trim(),
+      seniority: inputs.seniority.trim(),
+      skills: inputs.skills,
+      traits: inputs.traits
     };
-
     createUser({
       variables: {
         input: payload
@@ -85,6 +110,35 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
         size="small"
         sx={modalInputStyle}
         value={inputs.role}
+      />
+
+      <TextField
+        {...(errors.seniority && { helperText: errors.seniority })}
+        error={Boolean(errors.seniority)}
+        label="Seniority"
+        name="seniority"
+        onChange={handleInputChange}
+        size="small"
+        sx={modalInputStyle}
+        value={inputs.seniority}
+      />
+
+      <MultiSelect
+        fields={searchSkillsOptions}
+        handler={handleSelectChange}
+        label="Skills"
+        name="skills"
+        selected={inputs.skills}
+        sx={modalInputStyle}
+      />
+
+      <MultiSelect
+        fields={searchTraitsOptions}
+        handler={handleSelectChange}
+        label="Traits"
+        name="traits"
+        selected={inputs.traits}
+        sx={modalInputStyle}
       />
 
       <Button

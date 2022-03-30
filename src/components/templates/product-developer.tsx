@@ -6,7 +6,8 @@ export const ProductDeveloper: FC<UserProps> = ({
   id,
   name,
   surname,
-  role
+  role,
+  seniority,
 }) => (
   <>
     <Typography variant="h6">ID: {id}</Typography>
@@ -14,5 +15,6 @@ export const ProductDeveloper: FC<UserProps> = ({
       {name} {surname}'s page
     </Typography>
     <Typography variant="subtitle2">{role}</Typography>
+    <Typography variant="subtitle2">{seniority}</Typography>
   </>
 );
