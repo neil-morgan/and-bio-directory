@@ -1,10 +1,13 @@
 export { refetchUsers } from "./cache";
 export {
-  defaultNewUser,
+  defaultUser,
+  defaultUserErrors,
   searchKeys,
-  searchTraitsOptions,
-  searchSkillsOptions,
   searchRoleOptions,
-  searchSeniorityOptions
+  searchRolesOptions,
+  searchSeniorityOptions,
+  searchSkillsOptions,
+  searchTraitsOptions
 } from "./constants";
+export { objectHasStrings } from "./functions";
 export { validateUserForm } from "./validations";

@@ -1,12 +1,21 @@
-import type { UserProps } from "types";
+import type { UserType, UserTypeErrors } from "types";
 
-export const defaultNewUser: UserProps = {
+export const defaultUser: UserType = {
   name: "",
   surname: "",
   role: "",
   seniority: "",
   skills: [],
   traits: []
+};
+
+export const defaultUserErrors: UserTypeErrors = {
+  name: "",
+  surname: "",
+  role: "",
+  seniority: "",
+  skills: "",
+  traits: ""
 };
 
 export const searchKeys = [
@@ -16,6 +25,12 @@ export const searchKeys = [
   "skills",
   "surname",
   "traits"
+];
+
+export const searchRolesOptions = [
+  "Product Developer",
+  "Product Analyst",
+  "Squad Lead"
 ];
 
 export const searchTraitsOptions = [
@@ -30,7 +45,6 @@ export const searchSkillsOptions = [
   "GraphQL",
   "Javascript",
   "Typescript",
-  "GraphQL",
   "Scrum",
   "Agile",
   "UI/UX",
