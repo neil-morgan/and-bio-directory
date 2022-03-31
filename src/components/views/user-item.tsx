@@ -3,9 +3,9 @@ import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import type { FC } from "react";
 import { Link } from "react-router-dom";
-import type { UserProps } from "types";
+import type { UserType } from "types";
 
-export const UserItem: FC<UserProps> = ({ name, surname, role, id }) => {
+export const UserItem: FC<UserType> = ({ name, surname, role, id }) => {
   return (
     <Wrapper to={`/${id}`}>
       <Box>

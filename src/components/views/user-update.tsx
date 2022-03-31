@@ -6,19 +6,22 @@ import { UPDATE_USER } from "api";
 import { BasicSelect, MultiSelect } from "components/common";
 import type { FC } from "react";
 import { useState } from "react";
-import type { UserProps } from "types";
+import type { UserType } from "types";
 import {
-  defaultNewUser,
+  defaultUser,
+  defaultUserErrors,
   refetchUsers,
   searchSeniorityOptions,
+  searchRolesOptions,
   searchSkillsOptions,
   searchTraitsOptions,
+  objectHasStrings,
   validateUserForm
 } from "utils";
 
 type UserUpdateProps = {
   handleModalClose: () => void;
-} & UserProps;
+} & UserType;
 
 export const UserUpdate: FC<UserUpdateProps> = ({
   handleModalClose,
@@ -38,7 +41,7 @@ export const UserUpdate: FC<UserUpdateProps> = ({
     skills,
     traits
   });
-  const [errors, setErrors] = useState(defaultNewUser);
+  const [errors, setErrors] = useState(defaultUserErrors);
   const [updateUser] = useMutation(UPDATE_USER, refetchUsers());
 
   const handleInputChange = (event: {
@@ -61,37 +64,24 @@ export const UserUpdate: FC<UserUpdateProps> = ({
     const validations = validateUserForm(inputs);
     setErrors(validations);
 
-    // // checks for validation errors
-    for (const [key, value] of Object.entries(validations)) {
-      if (value !== "") {
-        if (Array.isArray(value)) {
-          if (value[0].length > 0) {
-            console.log(key, value);
-            return;
-          }
-        } else {
-          console.log(key, value);
-          return;
-        }
-      }
+    if (objectHasStrings(validations)) {
+      return;
     }
-
-    const payload = {
-      id,
-      name: inputs.name.trim(),
-      surname: inputs.surname.trim(),
-      role: inputs.role.trim(),
-      seniority: inputs.seniority.trim(),
-      skills: inputs.skills,
-      traits: inputs.traits
-    };
 
     updateUser({
       variables: {
-        input: payload
+        input: {
+          id,
+          name: inputs.name.trim(),
+          surname: inputs.surname.trim(),
+          role: inputs.role,
+          seniority: inputs.seniority,
+          skills: inputs.skills,
+          traits: inputs.traits
+        }
       }
     });
-    setInputs(defaultNewUser);
+    setInputs(defaultUser);
     handleModalClose();
   };
 
@@ -123,15 +113,15 @@ export const UserUpdate: FC<UserUpdateProps> = ({
         value={inputs.surname}
       />
 
-      <TextField
-        {...(errors.role && { helperText: errors.role })}
+      <BasicSelect
         error={Boolean(errors.role)}
+        fields={searchRolesOptions}
+        handler={handleSelectChange}
+        helperText={errors.role}
         label="Role"
         name="role"
-        onChange={handleInputChange}
-        size="small"
+        selected={inputs.role}
         sx={modalInputStyle}
-        value={inputs.role}
       />
 
       <BasicSelect

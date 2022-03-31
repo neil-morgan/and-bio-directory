@@ -6,8 +6,11 @@ import { BasicSelect, MultiSelect } from "components/common";
 import type { FC } from "react";
 import { useState } from "react";
 import {
-  defaultNewUser,
+  defaultUser,
+  defaultUserErrors,
+  objectHasStrings,
   refetchUsers,
+  searchRolesOptions,
   searchSeniorityOptions,
   searchSkillsOptions,
   searchTraitsOptions,
@@ -19,8 +22,8 @@ type UserCreateProps = {
 };
 
 export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
-  const [inputs, setInputs] = useState(defaultNewUser);
-  const [errors, setErrors] = useState(defaultNewUser);
+  const [inputs, setInputs] = useState(defaultUser);
+  const [errors, setErrors] = useState(defaultUserErrors);
   const [createUser] = useMutation(CREATE_USER, refetchUsers());
 
   const handleInputChange = (event: {
@@ -41,36 +44,26 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
 
   const handleSubmit = () => {
     const validations = validateUserForm(inputs, true);
+
     setErrors(validations);
-    // // checks for validation errors
-    for (const [key, value] of Object.entries(validations)) {
-      if (value !== "") {
-        if (Array.isArray(value)) {
-          if (value[0].length > 0) {
-            console.log(key, value);
-            return;
-          }
-        } else {
-          console.log(key, validations);
-          return;
-        }
-      }
+
+    if (objectHasStrings(validations)) {
+      return;
     }
 
-    const payload = {
-      name: inputs.name.trim(),
-      surname: inputs.surname.trim(),
-      role: inputs.role.trim(),
-      seniority: inputs.seniority.trim(),
-      skills: inputs.skills,
-      traits: inputs.traits
-    };
     createUser({
       variables: {
-        input: payload
+        input: {
+          name: inputs.name.trim(),
+          surname: inputs.surname.trim(),
+          role: inputs.role,
+          seniority: inputs.seniority,
+          skills: inputs.skills,
+          traits: inputs.traits
+        }
       }
     });
-    setInputs(defaultNewUser);
+    setInputs(defaultUser);
     handleModalClose();
   };
 
@@ -81,8 +74,8 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
       </Typography>
 
       <TextField
+        {...(errors.name && { helperText: errors.name })}
         error={Boolean(errors.name)}
-        helperText={errors.name ? errors.name : "A-Z"}
         label="Name"
         name="name"
         onChange={handleInputChange}
@@ -92,8 +85,8 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
       />
 
       <TextField
+        {...(errors.surname && { helperText: errors.surname })}
         error={Boolean(errors.surname)}
-        helperText={errors.surname ? errors.surname : "A-Z"}
         label="Surname"
         name="surname"
         onChange={handleInputChange}
@@ -102,29 +95,33 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
         value={inputs.surname}
       />
 
-      <TextField
-        {...(errors.role && { helperText: errors.role })}
+      <BasicSelect
         error={Boolean(errors.role)}
+        fields={searchRolesOptions}
+        handler={handleSelectChange}
+        helperText={errors.role}
         label="Role"
         name="role"
-        onChange={handleInputChange}
-        size="small"
+        selected={inputs.role}
         sx={modalInputStyle}
-        value={inputs.role}
       />
 
       <BasicSelect
-        name="seniority"
+        error={Boolean(errors.seniority)}
         fields={searchSeniorityOptions}
-        label="Seniority"
-        selected={inputs.seniority}
         handler={handleSelectChange}
+        helperText={errors.seniority}
+        label="Seniority"
+        name="seniority"
+        selected={inputs.seniority}
         sx={modalInputStyle}
       />
 
       <MultiSelect
+        error={Boolean(errors.skills)}
         fields={searchSkillsOptions}
         handler={handleSelectChange}
+        helperText={errors.skills}
         label="Skills"
         name="skills"
         selected={inputs.skills}
@@ -132,8 +129,10 @@ export const UserCreate: FC<UserCreateProps> = ({ handleModalClose }) => {
       />
 
       <MultiSelect
+        error={Boolean(errors.traits)}
         fields={searchTraitsOptions}
         handler={handleSelectChange}
+        helperText={errors.traits}
         label="Traits"
         name="traits"
         selected={inputs.traits}
