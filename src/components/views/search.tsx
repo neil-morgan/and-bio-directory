@@ -104,7 +104,7 @@ export const Search: FC = () => {
         <CircularProgress />
       ) : (
         <>
-          <Form>
+          <Container>
             <Typography variant="h4" sx={headingStyles}>
               Explore our ANDi's
             </Typography>
@@ -154,10 +154,10 @@ export const Search: FC = () => {
             {searchIndex.length > 0 && (
               <Button onClick={handleFormReset}>Reset all</Button>
             )}
-          </Form>
+          </Container>
 
           {searchIndex.length > 0 && (
-            <Results>
+            <Container>
               <Typography
                 align="center"
                 sx={{ width: "100%", mb: numOfResults ? 1 : 0 }}
@@ -173,7 +173,7 @@ export const Search: FC = () => {
                 searchResults
                   .slice(0, 4)
                   .map(props => <UserItem key={uuid()} {...props.item} />)}
-            </Results>
+            </Container>
           )}
         </>
       )}
@@ -181,34 +181,21 @@ export const Search: FC = () => {
   );
 };
 
-const Wrapper = styled("div")(({ theme }) => ({
+const Wrapper = styled("div")(() => ({
   display: "flex",
   maxWidth: 500,
   width: "100%",
   marginLeft: "auto",
   marginRight: "auto",
-  marginTop: theme.spacing(4),
   flexDirection: "column"
 }));
 
-const Form = styled("div")(({ theme }) => ({
+const Container = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-end",
   width: "100%",
-  marginBottom: theme.spacing(4),
-  padding: theme.spacing(2),
-  boxShadow: "0 0 0 #000",
-  backgroundColor: theme.palette.grey[50]
-}));
-
-const Results = styled("div")(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-end",
-  width: "100%",
-  padding: theme.spacing(2),
-  backgroundColor: theme.palette.grey[50]
+  marginTop: theme.spacing(4)
 }));
 
 const headingStyles = {

@@ -31,7 +31,7 @@ const Wrapper = styled(Link)(({ theme }) => ({
   paddingRight: theme.spacing(1),
   color: theme.palette.grey[700],
   backgroundColor: theme.palette.grey[100],
-  borderRadius: 1,
+  borderRadius: 3,
   textDecoration: "none",
   transition: "ease 250ms",
 
