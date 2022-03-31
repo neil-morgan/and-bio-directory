@@ -52,6 +52,12 @@ export const searchSkillsOptions = [
   "Jira"
 ];
 
+export const searchRoleOptions = [
+  "Product Developer",
+  "Product Analyst",
+  "Squad Lead"
+];
+
 export const searchSeniorityOptions = [
   "Associate",
   "Middle",

@@ -3,6 +3,7 @@ export {
   defaultUser,
   defaultUserErrors,
   searchKeys,
+  searchRoleOptions,
   searchRolesOptions,
   searchSeniorityOptions,
   searchSkillsOptions,
