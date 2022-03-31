@@ -7,7 +7,7 @@ import { UserItem } from "components/views";
 import Fuse from "fuse.js";
 import { useEffect, useState } from "react";
 import type { FC } from "react";
-import type { UserProps, SelectIndexSignature } from "types";
+import type { UserType, SelectIndexSignature } from "types";
 import {
   searchKeys,
   searchTraitsOptions,
@@ -17,7 +17,7 @@ import {
 import { v4 as uuid } from "uuid";
 
 type SearchProps = {
-  [key: number]: { item: UserProps };
+  [key: number]: { item: UserType };
   length: number;
 };
 
