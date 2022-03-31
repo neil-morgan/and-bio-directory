@@ -156,20 +156,24 @@ export const Search: FC = () => {
             )}
           </Form>
 
-          {searchIndex.length > 0 && numOfResults === 0 && (
-            <Typography align="center">Sorry, no results found...</Typography>
-          )}
-
-          {numOfResults > 0 && Array.isArray(searchResults) && (
-            <>
-              <Typography sx={{ mb: 2 }}>
-                Showing top {numOfResults >= 4 ? 4 : numOfResults} result
-                {numOfResults > 1 && "s"}
+          {searchIndex.length > 0 && (
+            <Results>
+              <Typography
+                align="center"
+                sx={{ width: "100%", mb: numOfResults ? 1 : 0 }}
+              >
+                {numOfResults === 0
+                  ? "Sorry, no results found..."
+                  : `Showing top ${
+                      numOfResults >= 4 ? 4 : numOfResults
+                    } result${numOfResults > 1 ? "s" : ""}`}
               </Typography>
-              {searchResults.slice(0, 4).map(props => (
-                <UserItem key={uuid()} {...props.item} />
-              ))}
-            </>
+
+              {Array.isArray(searchResults) &&
+                searchResults
+                  .slice(0, 4)
+                  .map(props => <UserItem key={uuid()} {...props.item} />)}
+            </Results>
           )}
         </>
       )}
@@ -192,7 +196,19 @@ const Form = styled("div")(({ theme }) => ({
   flexDirection: "column",
   alignItems: "flex-end",
   width: "100%",
-  marginBottom: theme.spacing(4)
+  marginBottom: theme.spacing(4),
+  padding: theme.spacing(2),
+  boxShadow: "0 0 0 #000",
+  backgroundColor: theme.palette.grey[50]
+}));
+
+const Results = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-end",
+  width: "100%",
+  padding: theme.spacing(2),
+  backgroundColor: theme.palette.grey[50]
 }));
 
 const headingStyles = {
