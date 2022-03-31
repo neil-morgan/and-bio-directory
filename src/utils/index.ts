@@ -4,6 +4,7 @@ export {
   searchKeys,
   searchTraitsOptions,
   searchSkillsOptions,
+  searchRoleOptions,
   searchSeniorityOptions
 } from "./constants";
 export { validateUserForm } from "./validations";

@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { Typography, TextField, CircularProgress } from "@mui/material";
+import { Typography, Button, TextField, CircularProgress } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { GET_USERS } from "api";
 import { BasicSelect, MultiSelect } from "components/common";
@@ -12,22 +12,22 @@ import {
   searchKeys,
   searchTraitsOptions,
   searchSkillsOptions,
+  searchRoleOptions,
   searchSeniorityOptions
 } from "utils";
 import { v4 as uuid } from "uuid";
 
-type SearchProps = {
+type SearchType = {
   [key: number]: { item: UserProps };
   length: number;
 };
 
-// TODO: add a reset button
-
 export const Search: FC = () => {
   const { data, loading } = useQuery(GET_USERS);
-  const [searchResults, setSearchResults] = useState<SearchProps>([]);
+  const [searchResults, setSearchResults] = useState<SearchType>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [seniority, setSeniority] = useState<string>("");
+  const [role, setRole] = useState<string>("");
   const [traits, setTraits] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
 
@@ -35,6 +35,7 @@ export const Search: FC = () => {
   const searchIndex = [
     searchQuery,
     seniority,
+    role,
     traits.join(" "),
     skills.join(" ")
   ]
@@ -56,6 +57,11 @@ export const Search: FC = () => {
       if (typeof selected === "string") {
         setSeniority(selected);
       }
+    },
+    role: selected => {
+      if (typeof selected === "string") {
+        setRole(selected);
+      }
     }
   };
 
@@ -69,84 +75,124 @@ export const Search: FC = () => {
     selectedIndex[name](selected);
   };
 
+  const handleFormReset = () => {
+    setSearchQuery("");
+    setSeniority("");
+    setRole("");
+    setTraits([]);
+    setSkills([]);
+  };
+
   useEffect(() => {
     if (!data) {
       return;
     }
 
     const fuse = new Fuse(data.users, {
-      threshold: 0.5, // https://fusejs.io/api/options.html#threshold
+      threshold: 0.3, // https://fusejs.io/api/options.html#threshold
       keys: searchKeys
     });
 
     setSearchResults(fuse.search(searchIndex));
   }, [data, searchIndex, searchQuery, seniority, skills, traits]);
 
-  return loading ? (
-    <CircularProgress />
-  ) : (
-    <SearchWrapper>
-      <Typography variant="h4" sx={headingStyles}>
-        Explore our ANDi's
-      </Typography>
+  const numOfResults = searchResults.length;
 
-      <TextField
-        label="Query"
-        onChange={handleInputChange}
-        size="medium"
-        sx={inputStyles}
-      />
+  return (
+    <Wrapper>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <>
+          <Form>
+            <Typography variant="h4" sx={headingStyles}>
+              Explore our ANDi's
+            </Typography>
+            <TextField
+              label="Query"
+              onChange={handleInputChange}
+              value={searchQuery}
+              size="medium"
+              sx={inputStyles}
+            />
 
-      <MultiSelect
-        name="skills"
-        fields={searchSkillsOptions}
-        label="Skills"
-        handler={handleSelectChange}
-        selected={skills}
-        sx={inputStyles}
-      />
+            <BasicSelect
+              name="role"
+              fields={searchRoleOptions}
+              label="Role"
+              selected={role}
+              handler={handleSelectChange}
+              sx={inputStyles}
+            />
 
-      <MultiSelect
-        name="traits"
-        fields={searchTraitsOptions}
-        label="Traits"
-        handler={handleSelectChange}
-        selected={traits}
-        sx={inputStyles}
-      />
+            <MultiSelect
+              name="skills"
+              fields={searchSkillsOptions}
+              label="Skills"
+              handler={handleSelectChange}
+              selected={skills}
+              sx={inputStyles}
+            />
 
-      <BasicSelect
-        name="seniority"
-        fields={searchSeniorityOptions}
-        label="Seniority"
-        selected={seniority}
-        handler={handleSelectChange}
-        sx={{ ...inputStyles, minWidth: 120 }}
-      />
+            <MultiSelect
+              name="traits"
+              fields={searchTraitsOptions}
+              label="Traits"
+              handler={handleSelectChange}
+              selected={traits}
+              sx={inputStyles}
+            />
 
-      {searchIndex.length > 0 && searchResults.length === 0 && (
-        <Typography>Sorry, no results found</Typography>
+            <BasicSelect
+              name="seniority"
+              fields={searchSeniorityOptions}
+              label="Seniority"
+              selected={seniority}
+              handler={handleSelectChange}
+              sx={inputStyles}
+            />
+            {searchIndex.length > 0 && (
+              <Button onClick={handleFormReset}>Reset all</Button>
+            )}
+          </Form>
+
+          {searchIndex.length > 0 && numOfResults === 0 && (
+            <Typography align="center">Sorry, no results found...</Typography>
+          )}
+
+          {numOfResults > 0 && Array.isArray(searchResults) && (
+            <>
+              <Typography sx={{ mb: 2 }}>
+                Showing top {numOfResults >= 4 ? 4 : numOfResults} result
+                {numOfResults > 1 && "s"}
+              </Typography>
+              {searchResults.slice(0, 4).map(props => (
+                <UserItem key={uuid()} {...props.item} />
+              ))}
+            </>
+          )}
+        </>
       )}
-
-      {searchResults.length > 0 &&
-        Array.isArray(searchResults) &&
-        searchResults
-          .slice(0, 4)
-          .map(props => <UserItem key={uuid()} {...props.item} />)}
-    </SearchWrapper>
+    </Wrapper>
   );
 };
 
-const SearchWrapper = styled("div")(({ theme }) => ({
+const Wrapper = styled("div")(({ theme }) => ({
   display: "flex",
-  width: 500,
+  maxWidth: 500,
+  width: "100%",
   marginLeft: "auto",
   marginRight: "auto",
-  marginTop: theme.spacing(6),
+  marginTop: theme.spacing(4),
+  flexDirection: "column"
+}));
+
+const Form = styled("div")(({ theme }) => ({
+  display: "flex",
   flexDirection: "column",
-  alignItems: "flex-start",
-  borderRadius: 5,
-  padding: theme.spacing(2)
+  alignItems: "flex-end",
+  width: "100%",
+  marginBottom: theme.spacing(4)
 }));
 
 const headingStyles = {
