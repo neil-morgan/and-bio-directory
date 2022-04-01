@@ -8,7 +8,7 @@ import {
   Typography
 } from "@mui/material";
 import { DELETE_USER, GET_USER } from "api";
-import { ProductDeveloper } from "components/templates";
+import { ProductDeveloper, ProductAnalyst, UxUiDesigner } from "components/templates";
 import { UserUpdate } from "components/views";
 import type { FC } from "react";
 import { useState, useRef } from "react";
@@ -49,6 +49,38 @@ export const UserPage: FC = () => {
     });
   };
 
+  const getProfile = (role: string) => {
+    switch (true) {
+      case role === "Product Developer":
+        return <ProductDeveloper
+          id={data.user.id}
+          name={data.user.name}
+          surname={data.user.surname}
+          role={data.user.role}
+          seniority={data.user.seniority}
+          skills={data.user.skills}
+          traits={data.user.traits}
+        />
+      case role === "Product Analyst":
+        return <ProductAnalyst
+          id={data.user.id}
+          name={data.user.name}
+          surname={data.user.surname}
+          role={data.user.role}
+          seniority={data.user.seniority}
+          skills={data.user.skills}
+          traits={data.user.traits}
+        />
+      // case role === "designer":
+      //   return <UxUiDesigner
+      //     id={data.user.id}
+      //     name={data.user.name}
+      //     surname={data.user.surname}
+      //     role={data.user.role}
+      //   />
+    }
+  }
+
   return loading ? (
     <CircularProgress />
   ) : (
@@ -57,7 +89,8 @@ export const UserPage: FC = () => {
         <Typography>back</Typography>
       </Link>
 
-      <ProductDeveloper {...data.user} />
+      {getProfile(data.user.role)}
+
       <Button
         variant="contained"
         color="secondary"
