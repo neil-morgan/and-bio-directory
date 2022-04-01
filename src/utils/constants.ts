@@ -1,29 +1,66 @@
-export const defaultNewUser = {
+import type { UserType, UserTypeErrors } from "types";
+
+export const defaultUser: UserType = {
   name: "",
   surname: "",
-  role: ""
+  role: "",
+  seniority: "",
+  skills: [],
+  traits: []
 };
 
-export const searchKeys = ["name", "surname", "role", "traits"];
+export const defaultUserErrors: UserTypeErrors = {
+  name: "",
+  surname: "",
+  role: "",
+  seniority: "",
+  skills: "",
+  traits: ""
+};
+
+export const searchKeys = [
+  "name",
+  "role",
+  "seniority",
+  "skills",
+  "surname",
+  "traits"
+];
+
+export const searchRolesOptions = [
+  "Product Developer",
+  "Product Analyst",
+  "Squad Lead"
+];
 
 export const searchTraitsOptions = [
-  "Approachable",
-  "Progressive",
   "Ambitious",
-  "Thoughtful",
-  "Friendly"
+  "Approachable",
+  "Friendly",
+  "Progressive",
+  "Thoughtful"
 ];
 
 export const searchSkillsOptions = [
-  "React",
+  "GraphQL",
   "Javascript",
   "Typescript",
-  "GraphQL"
+  "Scrum",
+  "Agile",
+  "UI/UX",
+  "Figma",
+  "Jira"
+];
+
+export const searchRoleOptions = [
+  "Product Developer",
+  "Product Analyst",
+  "Squad Lead"
 ];
 
 export const searchSeniorityOptions = [
   "Associate",
   "Middle",
-  "Senior",
-  "Principle"
+  "Principle",
+  "Senior"
 ];

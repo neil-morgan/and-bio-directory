@@ -1,12 +1,15 @@
 import { Typography } from "@mui/material";
 import type { FC } from "react";
-import type { UserProps } from "types";
+import type { UserType } from "types";
 
-export const ProductAnalyst: FC<UserProps> = ({
+export const ProductAnalyst: FC<UserType> = ({
     id,
     name,
     surname,
-    role
+    role,
+    seniority,
+    skills,
+    traits
 }) => (
     <>
         <Typography variant="h6">ID: {id}</Typography>

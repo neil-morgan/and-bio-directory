@@ -26,10 +26,13 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@types/jest": "^27.4.1",
     "@types/react": "^17.0.41",
     "@types/uuid": "^8.3.4",
     "@types/validator": "^13.7.1",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^27.5.1",
     "enzyme": "^3.11.0",
     "eslint": "^8.11.0",
     "eslint-config-galex": "^3.6.5",
@@ -37,14 +40,17 @@
     "jest": "^27.5.1",
     "jest-enzyme": "^7.1.2",
     "prettier": "^2.6.0",
-    "ts-jest": "^27.1.3",
-    "typescript": "^4.6.3"
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2"
   },
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage"
   },
   "browserslist": {
     "production": [

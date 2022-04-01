@@ -1,30 +1,69 @@
 import { useQuery } from "@apollo/client";
-import { Button, Typography, TextField, CircularProgress } from "@mui/material";
+import { Typography, Button, TextField, CircularProgress } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { GET_USERS } from "api";
 import { BasicSelect, MultiSelect } from "components/common";
+import { UserItem } from "components/views";
 import Fuse from "fuse.js";
 import { useEffect, useState } from "react";
 import type { FC } from "react";
-import type { UserProps } from "types";
+import type { UserType, SelectIndexSignature } from "types";
 import {
   searchKeys,
   searchTraitsOptions,
   searchSkillsOptions,
+  searchRoleOptions,
   searchSeniorityOptions
 } from "utils";
+import { v4 as uuid } from "uuid";
 
-type SearchProps = {
-  [key: number]: { item: UserProps };
+type SearchType = {
+  [key: number]: { item: UserType };
+  length: number;
 };
 
 export const Search: FC = () => {
   const { data, loading } = useQuery(GET_USERS);
-  const [searchResults, setSearchResults] = useState<SearchProps>([]);
+  const [searchResults, setSearchResults] = useState<SearchType>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [seniority, setSeniority] = useState<string>("");
+  const [role, setRole] = useState<string>("");
   const [traits, setTraits] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
+
+  // ? maybe .flat() here?
+  const searchIndex = [
+    searchQuery,
+    seniority,
+    role,
+    traits.join(" "),
+    skills.join(" ")
+  ]
+    .join(" ")
+    .trim();
+
+  const selectedIndex: SelectIndexSignature = {
+    traits: selected => {
+      if (Array.isArray(selected)) {
+        setTraits(selected);
+      }
+    },
+    skills: selected => {
+      if (Array.isArray(selected)) {
+        setSkills(selected);
+      }
+    },
+    seniority: selected => {
+      if (typeof selected === "string") {
+        setSeniority(selected);
+      }
+    },
+    role: selected => {
+      if (typeof selected === "string") {
+        setRole(selected);
+      }
+    }
+  };
 
   const handleInputChange = (event: {
     target: HTMLInputElement | HTMLTextAreaElement;
@@ -32,92 +71,137 @@ export const Search: FC = () => {
     setSearchQuery(event.target.value);
   };
 
+  const handleSelectChange = (name: string, selected: string[] | string) => {
+    selectedIndex[name](selected);
+  };
+
+  const handleFormReset = () => {
+    setSearchQuery("");
+    setSeniority("");
+    setRole("");
+    setTraits([]);
+    setSkills([]);
+  };
+
   useEffect(() => {
     if (!data) {
       return;
     }
 
-    const searchIndex = new Fuse(data.users, {
-      includeScore: true, // https://fusejs.io/api/options.html#includescore
+    const fuse = new Fuse(data.users, {
+      threshold: 0.3, // https://fusejs.io/api/options.html#threshold
       keys: searchKeys
     });
 
-    const searchMap = [
-      searchQuery,
-      seniority,
-      traits.join(" "),
-      skills.join(" ")
-    ].join(" ");
+    setSearchResults(fuse.search(searchIndex));
+  }, [data, searchIndex, searchQuery, seniority, skills, traits]);
 
-    setSearchResults(searchIndex.search(searchMap));
-  }, [data, searchQuery, traits, seniority, skills]);
+  const numOfResults = searchResults.length;
 
-  console.log(searchResults);
+  return (
+    <Wrapper>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <>
+          <Container>
+            <Typography variant="h4" sx={headingStyles}>
+              Explore our ANDi's
+            </Typography>
+            <TextField
+              label="Query"
+              onChange={handleInputChange}
+              value={searchQuery}
+              size="medium"
+              sx={inputStyles}
+            />
 
-  return loading ? (
-    <CircularProgress />
-  ) : (
-    <SearchWrapper>
-      <Typography variant="h4" sx={headingStyles}>
-        Explore our ANDi's
-      </Typography>
-      <TextField
-        label="Query"
-        onChange={handleInputChange}
-        size="medium"
-        sx={inputStyles}
-      />
-      <MultiSelect
-        fields={searchSkillsOptions}
-        label="Skills"
-        setState={setSkills}
-        state={skills}
-        sx={inputStyles}
-      />
-      <MultiSelect
-        fields={searchTraitsOptions}
-        label="Traits"
-        setState={setTraits}
-        state={traits}
-        sx={inputStyles}
-      />
-      <BasicSelect
-        fields={searchSeniorityOptions}
-        label="Seniority"
-        state={seniority}
-        setState={setSeniority}
-        sx={{ ...inputStyles, minWidth: 120 }}
-      />
+            <BasicSelect
+              name="role"
+              fields={searchRoleOptions}
+              label="Role"
+              selected={role}
+              handler={handleSelectChange}
+              sx={inputStyles}
+            />
 
-      <Button variant="contained" size="large" sx={buttonStyles}>
-        ANDi Search
-      </Button>
-    </SearchWrapper>
+            <MultiSelect
+              name="skills"
+              fields={searchSkillsOptions}
+              label="Skills"
+              handler={handleSelectChange}
+              selected={skills}
+              sx={inputStyles}
+            />
+
+            <MultiSelect
+              name="traits"
+              fields={searchTraitsOptions}
+              label="Traits"
+              handler={handleSelectChange}
+              selected={traits}
+              sx={inputStyles}
+            />
+
+            <BasicSelect
+              name="seniority"
+              fields={searchSeniorityOptions}
+              label="Seniority"
+              selected={seniority}
+              handler={handleSelectChange}
+              sx={inputStyles}
+            />
+            {searchIndex.length > 0 && (
+              <Button onClick={handleFormReset}>Reset all</Button>
+            )}
+          </Container>
+
+          {searchIndex.length > 0 && (
+            <Container>
+              <Typography
+                align="center"
+                sx={{ width: "100%", mb: numOfResults ? 1 : 0 }}
+              >
+                {numOfResults === 0
+                  ? "Sorry, no results found..."
+                  : `Showing top ${
+                      numOfResults >= 4 ? 4 : numOfResults
+                    } result${numOfResults > 1 ? "s" : ""}`}
+              </Typography>
+
+              {Array.isArray(searchResults) &&
+                searchResults
+                  .slice(0, 4)
+                  .map(props => <UserItem key={uuid()} {...props.item} />)}
+            </Container>
+          )}
+        </>
+      )}
+    </Wrapper>
   );
 };
 
-const SearchWrapper = styled("div")(({ theme }) => ({
+const Wrapper = styled("div")(() => ({
   display: "flex",
-  width: 500,
+  maxWidth: 500,
+  width: "100%",
   marginLeft: "auto",
   marginRight: "auto",
-  marginTop: theme.spacing(6),
+  flexDirection: "column"
+}));
+
+const Container = styled("div")(({ theme }) => ({
+  display: "flex",
   flexDirection: "column",
-  alignItems: "flex-start",
-  borderRadius: 5,
-  padding: theme.spacing(2)
+  alignItems: "flex-end",
+  width: "100%",
+  marginTop: theme.spacing(4)
 }));
 
 const headingStyles = {
   width: "100%",
   textAlign: "center",
   py: 1
-};
-
-const buttonStyles = {
-  marginLeft: "auto",
-  marginRight: "auto",
-  my: 1
 };
 
 const inputStyles = {

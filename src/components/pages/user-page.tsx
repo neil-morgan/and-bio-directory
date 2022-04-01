@@ -57,6 +57,9 @@ export const UserPage: FC = () => {
           name={data.user.name}
           surname={data.user.surname}
           role={data.user.role}
+          seniority={data.user.seniority}
+          skills={data.user.skills}
+          traits={data.user.traits}
         />
       case role === "Product Analyst":
         return <ProductAnalyst
@@ -64,6 +67,9 @@ export const UserPage: FC = () => {
           name={data.user.name}
           surname={data.user.surname}
           role={data.user.role}
+          seniority={data.user.seniority}
+          skills={data.user.skills}
+          traits={data.user.traits}
         />
       // case role === "designer":
       //   return <UxUiDesigner
@@ -79,7 +85,7 @@ export const UserPage: FC = () => {
     <CircularProgress />
   ) : (
     <>
-      <Link to="/">
+      <Link to="/users">
         <Typography>back</Typography>
       </Link>
 
@@ -142,13 +148,7 @@ export const UserPage: FC = () => {
       {userId && (
         <Modal open={modalOpen} onClose={handleModalClose}>
           <Box sx={modalBoxStyle}>
-            <UserUpdate
-              handleModalClose={handleModalClose}
-              id={userId}
-              name={data.user.name}
-              surname={data.user.surname}
-              role={data.user.role}
-            />
+            <UserUpdate handleModalClose={handleModalClose} {...data.user} />
           </Box>
         </Modal>
       )}

@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { GET_USERS } from "api";
 import { UsersList, UserItem } from "components/views";
 import type { FC } from "react";
-import type { UserProps } from "types";
+import type { UserType } from "types";
 import { v4 as uuid } from "uuid";
 
 export const UsersPage: FC = () => {
@@ -15,14 +15,8 @@ export const UsersPage: FC = () => {
 
   return (
     <UsersList>
-      {data?.users.map(({ name, surname, id, role }: UserProps) => (
-        <UserItem
-          key={uuid()}
-          name={name}
-          surname={surname}
-          role={role}
-          id={id}
-        />
+      {data?.users.map((props: UserType) => (
+        <UserItem key={uuid()} {...props} />
       ))}
     </UsersList>
   );

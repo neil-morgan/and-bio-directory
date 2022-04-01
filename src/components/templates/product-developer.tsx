@@ -1,13 +1,16 @@
 import { Box, Typography, styled, Grid } from "@mui/material";
 import { fontWeight } from "@mui/system";
 import type { FC } from "react";
-import type { UserProps } from "types";
+import type { UserType } from "types";
 
-export const ProductDeveloper: FC<UserProps> = ({
+export const ProductDeveloper: FC<UserType> = ({
   id,
   name,
   surname,
-  role
+  role,
+  seniority,
+  skills,
+  traits
 }) => (
   <>
     {/* <Typography variant="h6">ID: {id}</Typography>

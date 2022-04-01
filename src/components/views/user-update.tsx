@@ -1,25 +1,47 @@
+/* eslint object-shorthand: 0 */
+
 import { useMutation } from "@apollo/client";
 import { Button, Typography, TextField } from "@mui/material";
 import { UPDATE_USER } from "api";
+import { BasicSelect, MultiSelect } from "components/common";
 import type { FC } from "react";
 import { useState } from "react";
-import type { UserProps } from "types";
-import { defaultNewUser, refetchUsers, validateUserForm } from "utils";
+import type { UserType } from "types";
+import {
+  defaultUser,
+  defaultUserErrors,
+  refetchUsers,
+  searchSeniorityOptions,
+  searchRolesOptions,
+  searchSkillsOptions,
+  searchTraitsOptions,
+  objectHasStrings,
+  validateUserForm
+} from "utils";
 
 type UserUpdateProps = {
   handleModalClose: () => void;
-} & UserProps;
+} & UserType;
 
 export const UserUpdate: FC<UserUpdateProps> = ({
   handleModalClose,
   id,
   name,
   surname,
-  role
+  role,
+  seniority,
+  skills,
+  traits
 }) => {
-  const [inputs, setInputs] = useState({ name, surname, role });
-  const [errors, setErrors] = useState(defaultNewUser);
-
+  const [inputs, setInputs] = useState({
+    name,
+    surname,
+    role,
+    seniority,
+    skills,
+    traits
+  });
+  const [errors, setErrors] = useState(defaultUserErrors);
   const [updateUser] = useMutation(UPDATE_USER, refetchUsers());
 
   const handleInputChange = (event: {
@@ -31,28 +53,35 @@ export const UserUpdate: FC<UserUpdateProps> = ({
     }));
   };
 
+  const handleSelectChange = (name: string, selected: string[] | string) => {
+    setInputs(inputs => ({
+      ...inputs,
+      [name]: selected
+    }));
+  };
+
   const handleSubmit = () => {
     const validations = validateUserForm(inputs);
     setErrors(validations);
 
-    // // checks for validation errors
-    if (Object.values(validations).some(i => i !== "")) {
+    if (objectHasStrings(validations)) {
       return;
     }
 
-    const payload = {
-      id,
-      name: inputs.name.trim(),
-      surname: inputs.surname.trim(),
-      role: inputs.role.trim()
-    };
-
     updateUser({
       variables: {
-        input: payload
+        input: {
+          id,
+          name: inputs.name.trim(),
+          surname: inputs.surname.trim(),
+          role: inputs.role,
+          seniority: inputs.seniority,
+          skills: inputs.skills,
+          traits: inputs.traits
+        }
       }
     });
-    setInputs(defaultNewUser);
+    setInputs(defaultUser);
     handleModalClose();
   };
 
@@ -84,15 +113,42 @@ export const UserUpdate: FC<UserUpdateProps> = ({
         value={inputs.surname}
       />
 
-      <TextField
-        {...(errors.role && { helperText: errors.role })}
+      <BasicSelect
         error={Boolean(errors.role)}
+        fields={searchRolesOptions}
+        handler={handleSelectChange}
+        helperText={errors.role}
         label="Role"
         name="role"
-        onChange={handleInputChange}
-        size="small"
+        selected={inputs.role}
         sx={modalInputStyle}
-        value={inputs.role}
+      />
+
+      <BasicSelect
+        name="seniority"
+        fields={searchSeniorityOptions}
+        label="Seniority"
+        selected={inputs.seniority}
+        handler={handleSelectChange}
+        sx={modalInputStyle}
+      />
+
+      <MultiSelect
+        name="skills"
+        fields={searchSkillsOptions}
+        label="Skills"
+        handler={handleSelectChange}
+        selected={inputs.skills}
+        sx={modalInputStyle}
+      />
+
+      <MultiSelect
+        name="traits"
+        fields={searchTraitsOptions}
+        label="Traits"
+        handler={handleSelectChange}
+        selected={inputs.traits}
+        sx={modalInputStyle}
       />
 
       <Button
